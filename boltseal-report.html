@@ -1,0 +1,2388 @@
+<!DOCTYPE html>
+<html lang="en" style="overflow-y: scroll;">
+<head>
+  <meta charset="UTF-8">
+  <title>Newman Summary Report</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.2/styles/default.min.css">
+  <link rel="stylesheet" href="https://cdn.datatables.net/v/bs4/dt-1.10.18/datatables.min.css"/>
+
+<style>
+code.renderMarkdown table, code.renderMarkdown th, code.renderMarkdown td {
+    border: 1px solid black;
+    width: max-content;
+    padding: .75rem;
+}
+
+.theme-dark {
+    --background-color: #222;
+    --bg-card-deck: #444444;
+    --text-color: #ccd2d8;
+    --tab-border: solid 1px #444;
+    --success: #3c9372;
+    --failure: #c24a3f;
+    --warning: #d28c23;
+    --info: #4083b6;
+    --badge-outline: #3c9372;
+    --badge-bg: #cdd3db;
+    --badge-text: #ccd2d9;
+    --failure-row: #c24a3f;
+    --warning-row: #d28c23;
+    --card-bg: #444;
+    --card-footer: #4f5758;
+    --form-input: #ececb5;
+    --hov-text: #d2dae5;
+    --h4-text: #ccd1d9;
+}
+
+.theme-light {
+    --tab-border: solid 1px #fff;
+    --text-color: #000000;
+    --success: #42a745;
+    --failure: #dc3544;
+    --warning: #f4c10b;
+    --info: #49a1b8;
+    --badge-outline: #040411;
+    --badge-bg: #f8f9fa;
+    --badge-text: #fff;
+    --failure-row: #f5c6cb;
+    --warning-row: #ffeeba;
+    --card-bg: #f7f7f7;
+    --hov-text: #fff;
+    --h4-text: #ffffff;
+}
+
+body {
+  padding-top:30px;
+  background-color: var(--background-color)!important;
+  color: var(--text-color);
+}
+
+#execution-data {
+  padding: 10px;
+  border: var(--tab-border);
+  border-top: none;
+}
+
+.nav-tabs {
+  padding-top: 10px;
+  height: 105px;
+  overflow-y: auto;
+}
+
+body.theme-dark .card-header {
+    background-color: #444;
+}
+
+body.theme-light .card-header {
+    background-color: #f7f7f7;
+}
+
+.card-footer {
+    padding: .75rem 1.25rem;
+    background-color: var(--card-footer);
+}
+
+.card-deck {
+    background-color: var(--bg-card-deck)!important;
+}
+.form-control {
+    background: var(--form-input);
+}
+
+.custom-tab {
+  padding: 10px 15px;
+  margin-right: 0px;
+  height: 47px;
+  width: 69px;
+  text-align: center;
+  border: var(--tab-border);
+  border-bottom: none;
+  cursor:pointer;
+}
+
+body.theme-dark .text-white {
+    color: #ccd2d9!important;
+}
+h4 {
+    color: var(--h4-text);
+}
+
+body.theme-dark h1 {
+    color: #ccd2da;
+}
+
+body.theme-dark .bg-light>td {
+    background: #4f5858!important;
+}
+
+body.theme-dark .hljs {
+    background: #0a0a0ab0!important;
+    color: #8d8787!important;
+}
+
+.bg-info {
+    background-color: var(--info)!important;
+}
+.bg-success {
+    background-color: var(--success)!important;
+}
+
+.alert-success {
+    background-color: var(--success)!important;
+}
+
+.alert-warning {
+    background-color: var(--warning)!important;
+}
+
+.alert-info {
+    background-color: var(--info)!important;
+}
+
+.bg-warning {
+    background-color: var(--warning)!important;
+}
+
+.badge-warning {
+    color: var(--badge-text)!important;
+    background-color: var(--warning)!important;
+}
+
+.table-warning>td {
+    background-color: var(--warning-row);
+}
+
+.alert-danger {
+    background-color: var(--failure)!important;
+}
+
+body.theme-dark .alert-dark {
+    background-color: #636467!important;
+}
+
+body.theme-dark .text-dark {
+    color: #d1dae4!important;
+}
+
+body.theme-dark .badge-light {
+    color: #212529;
+    background-color: #cdd3db;
+}
+
+body.theme-light .badge-light {
+    color: #212529;
+    background-color: #f8f9fa;
+}
+body.theme-light .bg-danger {
+    background-color: var(--failure)!important;
+}
+
+body.theme-dark .bg-danger {
+    background-color: var(--failure)!important;
+}
+
+.table-danger>td {
+    background-color: var(--failure-row);
+}
+
+body.theme-dark .table .thead-light th {
+    background-color: #4f5858!important;
+    border-color: #dee2e6!important;
+    color: #ccd2d8!important;
+}
+
+.itPassed {
+  background: var(--success);
+  color: white;
+}
+.itFailed {
+  background: var(--failure);
+  color: white;
+}
+
+.resultsInfoPass {
+  color: var(--success);
+  padding-top: 4px;
+}
+
+.resultsInfoFail {
+  color: var(--failure);
+  padding-top: 4px;
+}
+
+.badge-outline-success {
+  color: var(--success);
+  border: 1px solid var(--success);
+  background-color: transparent;
+}
+
+.badge-outline {
+  color: var(--badge-outline);
+  border: 1px solid var(--badge-outline);
+  background-color: transparent;
+}
+
+.btn-outline-success {
+    color: var(--success)!important;
+    border-color: var(--success)!important;
+}
+
+.backToTop:hover {
+  background-color: var(--success);
+  border-color: var(--success);
+  color: var(--hov-text)!important;
+}
+
+.btn-outline-success:hover {
+  background-color: var(--success);
+  border-color: var(--success);
+  color: var(--hov-text)!important;
+}
+
+.btn-outline-secondary {
+  background-color: var(--success)!important;
+  color: var(--hov-text)!important;
+}
+
+body.theme-dark .env-heading {
+    color: #ccd2d9!important;
+}
+
+body, html {
+  height:100%;
+}
+
+.card {
+  overflow:hidden;
+}
+
+body.theme-dark .card-body {
+    background-color: #444;
+}
+
+body.theme-light .card-body {
+    background-color: #f7f7f7;
+}
+
+body.theme-dark .card-body .bg-danger {
+    background-color: var(--failure)!important;
+}
+
+body.theme-light .card-body .bg-danger {
+    background-color: var(--failure)!important;
+}
+
+.card-body .rotate {
+  z-index: 8;
+  float: right;
+  height: 100%;
+}
+
+.card-body .rotate i {
+  color: #14141426;
+  position: absolute;
+  left: 0;
+  left: auto;
+  right: -10px;
+  bottom: 0;
+  display: block;
+  -webkit-transform: rotate(-44deg);
+  -moz-transform: rotate(-44deg);
+  -o-transform: rotate(-44deg);
+  -ms-transform: rotate(-44deg);
+  transform: rotate(-44deg);
+}
+
+.dyn-height {
+  max-height:350px;
+  overflow-y:auto;
+}
+
+.nav-pills .nav-link.active {
+  background-color: transparent!important;
+}
+
+.backToTop {
+  display: none;
+  position: fixed;
+  bottom: 10px;
+  right: 20px;
+  z-index: 99;
+  font-size: 15px;
+  outline: none;
+  cursor: pointer;
+  padding: 15px;
+  border-radius: 4px;
+}
+
+.card-header .fa {
+  transition: .3s transform ease-in-out;
+}
+.card-header .collapsed .fa {
+  transform: rotate(90deg);
+}
+
+.single-line-tabs {
+  padding-top: 10px;
+  height: 60px;
+}
+
+::-webkit-scrollbar {
+  width: 5px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #888;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+/* The switch - the box around the slider */
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 44px;
+  height: 20px;
+}
+
+/* Hide default HTML checkbox */
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+/* The slider */
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  -webkit-transition: 0.4s;
+  transition: 0.4s;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 20px;
+  width: 20px;
+  left: 0px;
+  bottom: 4px;
+  top: 0;
+  bottom: 0;
+  margin: auto 0;
+  -webkit-transition: 0.4s;
+  transition: 0.4s;
+  box-shadow: 0 0px 15px #2020203d;
+  background: white;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+input:checked + .slider {
+  background-color: #4083b6;
+}
+
+input:focus + .slider {
+  box-shadow: 0 0 1px #4083b6;
+}
+
+input:checked + .slider:before {
+  -webkit-transform: translateX(24px);
+  -ms-transform: translateX(24px);
+  transform: translateX(24px);
+  background: white;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+/* Rounded sliders */
+.slider.round {
+  border-radius: 34px;
+}
+
+.slider.round:before {
+  border-radius: 50%;
+}
+
+table.dataTable td, table.dataTable tr {
+    vertical-align: middle;
+}
+
+body.theme-dark code {
+    color: #ccd2d8!important;
+}
+
+body.theme-light code {
+    color: #000000!important;
+}
+
+.text-wrap {
+    word-wrap: break-word; 
+    min-width: 600px; 
+    max-width: 600px; 
+    white-space: normal;
+}
+
+</style>
+</head>
+<body class="theme-dark">
+<script>
+    function setTheme(themeName) {
+        localStorage.setItem('theme', themeName);
+        document.body.className = themeName;
+    }
+
+    function toggleTheme() {
+        if (localStorage.getItem('theme') === 'theme-light') {
+            setTheme('theme-dark');
+        } else {
+            setTheme('theme-light');
+        }
+    }
+</script>
+  <div class="container">
+        <div class="container">
+            <label>Light</label>
+            <label id="switch" class="switch">
+                <input type="checkbox" onchange="toggleTheme()" id="slider">
+                <span class="slider round"></span>
+            </label>
+            <label>Dark</label>
+        </div>
+        <div class="card">
+        <div class="card-header">
+            <ul class="nav nav-pills mb-3 nav-justified" id="pills-tab" role="tablist">
+            <li class="nav-item bg-info active" data-toggle="tooltip" title="Click to view the Summary">
+                <a class="nav-link text-white" id="pills-summary-tab" data-toggle="pill" href="#pills-summary" role="tab" aria-controls="pills-summary" aria-selected="true">Summary</a>
+            </li>
+            <li class="nav-item bg-success" data-toggle="tooltip" title="Click to view the Requests">
+                <a class="nav-link text-white" id="pills-requests-tab" data-toggle="pill" href="#pills-requests" role="tab" aria-controls="pills-requests" aria-selected="false">Total Requests <span class="badge badge-light">6</span></a>
+            </li>
+            <li class="nav-item bg-danger" data-toggle="tooltip" title="Click to view the Failed Tests">
+                <a class="nav-link text-white" id="pills-failed-tab" data-toggle="pill" href="#pills-failed" role="tab" aria-controls="pills-failed" aria-selected="false">Failed Tests <span class="badge badge-light">1</span></a>
+            </li>
+            <li class="nav-item bg-warning" data-toggle="tooltip" title="Click to view the Skipped Tests">
+                <a class="nav-link text-white" id="pills-skipped-tab" data-toggle="pill" href="#pills-skipped" role="tab" aria-controls="pills-skipped" aria-selected="false">Skipped Tests <span class="badge badge-light">0</span></a>
+            </li>
+            </ul>
+        <div class="tab-content" id="pills-tabContent">
+            <div class="tab-pane fade show active" id="pills-summary" role="tabcard" aria-labelledby="pills-summary-tab">
+<div class="row">
+  <div class="col-md-9 col-lg-12 main">
+   <h1 class="display-2 text-center">Newman Run Dashboard</h1>
+   <h5 class="text-center">Thursday, 28 March 2024 16:49:34</h5>
+   <div class="row">
+    <div class="col-lg-3 col-md-6">
+     <div class="card text-white card-success">
+      <div class="card-body bg-danger">
+       <div class="rotate">
+        <i class="fa fa-retweet fa-5x"></i>
+       </div>
+       <h6 class="text-uppercase">Total Iterations</h6>
+       <h1 class="display-1">1</h1>
+      </div>
+     </div>
+    </div>
+    <div class="col-lg-3 col-md-6">
+     <div class="card text-white card-danger">
+      <div class="card-body bg-success">
+       <div class="rotate">
+        <i class="fa fa-list fa-4x"></i>
+       </div>
+       <h6 class="text-uppercase">Total Assertions</h6>
+       <h1 class="display-1">0</h1>
+      </div>
+     </div>
+    </div>
+    <div class="col-lg-3 col-md-6">
+     <div class="card text-white card-info">
+      <div class="card-body bg-danger">
+       <div class="rotate">
+        <i class="fa fa-plus-circle fa-5x"></i>
+       </div>
+       <h6 class="text-uppercase">Total Failed Tests</h6>
+       <h1 class="display-1">1</h1>
+      </div>
+     </div>
+    </div>
+    <div class="col-lg-3 col-md-6">
+     <div class="card text-white card-warning">
+      <div class="card-body bg-success">
+       <div class="rotate">
+        <i class="fa fa-share fa-5x"></i>
+       </div>
+       <h6 class="text-uppercase">Total Skipped Tests</h6>
+       <h1 class="display-1">0</h1>
+      </div>
+     </div>
+    </div>
+   </div>
+   <hr>
+    <div class="row">
+    <div class="col">
+        <div class="row">
+        <div class="col-sm-12 mb-3">
+            <div class="card border-info">
+                <div class="card-body">
+                <h5 class="card-title text-uppercase text-white text-center bg-info">File Information</h5>
+                <span><i class="fas fa-file-code"></i></span><strong> Collection:</strong> BoltSeal Frontend Exporter<br>
+                
+                
+                </div>
+            </div>
+        </div>
+        </div>
+        <div class="row">
+        <div class="col-sm-12 mb-3">
+            <div class="card border-info">
+                <div class="card-body">
+                <h5 class="card-title text-uppercase text-white text-center bg-info">Timings and Data</h5>
+                <span><i class="fas fa-stopwatch"></i></span><strong> Total run duration:</strong> 4.3s<br>
+                <span><i class="fas fa-database"></i></span><strong> Total data received:</strong> 26.86KB<br>
+                <span><i class="fas fa-stopwatch"></i></span><strong> Average response time:</strong> 312ms<br>
+                </div>
+            </div>
+        </div>
+        </div>
+        <div class="row">
+        <div class="col-sm-12 mb-3">
+            <div class="table-responsive">
+            <table class="table table-striped table-bordered">
+                <thead class="thead-inverse">
+                    <tr class="text-center">
+                        <th class="text-uppercase">Summary Item</th>
+                        <th class="text-uppercase">Total</th>
+                        <th class="text-uppercase">Failed</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Requests</td>
+                        <td class="text-center">6</td>
+                        <td class="text-center">1</td>
+                    </tr>
+                    <tr>
+                        <td>Prerequest Scripts</td>
+                        <td class="text-center">0</td>
+                        <td class="text-center">0</td>
+                    </tr>
+                    <tr>
+                        <td>Test Scripts</td>
+                        <td class="text-center">0</td>
+                        <td class="text-center">0</td>
+                    </tr>
+                    <tr class="table-danger">
+                        <td>Assertions</td>
+                        <td class="text-center">0</td>
+                        <td class="text-center">0</td>
+                    </tr>
+                    <tr class="">
+                        <td>Skipped Tests</td>
+                        <td class="text-center">0</td>
+                        <td class="text-center">-</td>
+                    </tr>
+                </tbody>
+            </table>
+            </div>
+        </div>
+        </div>
+    <hr>
+   </div>
+   </div>
+  </div>
+ </div>
+        </div>
+            <div class="tab-pane fade" id="pills-failed" role="tabcard" aria-labelledby="pills-failed-tab">
+                <button id="topOfFailuresScreen" class="btn btn-outline-success btn-sm backToTop" onclick="topFunction()">Go To Top</button>
+
+                    <div class="btn-group float-right" role="group" aria-label="Button Group">
+                        <button id="openAllFailed" class="btn btn-outline-success btn-sm float-right" style="text-align: center; width: 185px;">Expand All Failed Tests</button>
+                    </div>
+                    <br>
+                    <br>
+
+                    <div class="alert alert-danger text-uppercase text-center">
+                        <h4>Showing 1 Failure</h4>
+                    </div>
+                    <div class="col-sm-12 mb-3">
+                    <div class="card-deck">
+                        <div class="card border-danger">
+                            <div class="card-header bg-danger">
+                                <a data-toggle="collapse" href="#" data-target="#fails-collapse-e0acac6b-1fe9-4384-a24c-a2ee03409d13" aria-expanded="false" aria-controls="collapse" id="fails-e0acac6b-1fe9-4384-a24c-a2ee03409d13" class="collapsed text-white z-block">
+                                    Iteration 1 - Error - BoltSeal Frontend Exporter - http://www.beta.boltseal.com/sealservices/confirmSeal <i class="float-lg-right fa fa-chevron-down" style="padding-top:5px;"></i>
+                                </a>
+                            </div>
+                            <div id="fails-collapse-e0acac6b-1fe9-4384-a24c-a2ee03409d13" class="collapse" aria-labelledby="fails-e0acac6b-1fe9-4384-a24c-a2ee03409d13">
+                            <div class="card-body">
+                                <h5 ><strong>Failed Test:</strong> </h5>
+                            <hr>
+                            <h5 class="card-title text-uppercase text-white text-center bg-danger">Assertion Error Message</h5>
+                            <div>
+                                <pre><code >getaddrinfo ENOTFOUND confirmseal</code></pre>
+                            </div>
+                            </div>
+                            </div>
+                        </div>
+                    </div>
+                    </div>
+            </div>
+
+            <div class="tab-pane fade" id="pills-skipped" role="tabcard" aria-labelledby="pills-skipped-tab">
+                <button id="topOfSkippedScreen" class="btn btn-outline-success btn-sm backToTop" onclick="topFunction()">Go To Top</button>
+
+                <div class="alert alert-success text-uppercase text-center">
+                    <br><br><h1 class="text-center">There are no skipped tests <span><i class="far fa-thumbs-up"></i></span></h1><br><br>
+                </div>
+            </div>
+            <div class="tab-pane fade" id="pills-requests" role="tabcard" aria-labelledby="pills-requests-tab">
+
+            <button id="topOfRequestsScreen" class="btn btn-outline-success btn-sm backToTop" onclick="topFunction()">Go To Top</button>
+
+            <div class="btn-group float-right" role="group" aria-label="Button Group">
+                <button id="showOnlyFailures" class="btn btn-outline-success btn-sm float-right" style="text-align: center; width:160px;">Show Failed Iterations</button>
+                <button id="openAll" class="btn btn-outline-success btn-sm float-right" style="text-align: center; width: 140px;">Expand Folders</button>
+                <button id="openAllRequests" class="btn btn-outline-success btn-sm float-right" style="text-align: center; width: 140px;">Expand Requests</button>
+            </div>
+
+    <div class="text-uppercase" id="execution-menu">
+        <h5>1 Iteration available to view</h5>
+        
+        <nav class="table-responsive">
+        <ul class="nav single-line-tabs" id="iterationList">
+        </ul>
+        </nav>
+    </div>
+    <h6 class="text-uppercase text-muted" id="iterationSelected" style="padding-top: 10px;"></h6>
+	<div class="tab-content" id="execution-data">
+            <div id="folder-89387108-31a1-46d6-94f2-b3c0e18d779d" class="card-deck iteration-0">
+            <div class="row iteration-0">
+                <div class="col-sm-12 mb-3 iteration-0">
+                <div class="card iteration-0">
+                    <div class="card-header  bg-success iteration-0">
+                        <a data-toggle="collapse" href="#" data-target="#collapse-89387108-31a1-46d6-94f2-b3c0e18d779d" aria-expanded="false" aria-controls="collapse" id="requests-89387108-31a1-46d6-94f2-b3c0e18d779d" class="collapsed text-white z-block">
+                    Iteration: 1 - getSealTripDetailsuser <i class="float-lg-right fa fa-chevron-down" style="padding-top: 5px;"></i>
+                </a>
+                    </div>
+                    <div id="collapse-89387108-31a1-46d6-94f2-b3c0e18d779d" class="collapse" aria-labelledby="requests-89387108-31a1-46d6-94f2-b3c0e18d779d">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-sm-12 mb-3">
+                                <div class="card-deck">
+                                <div class="card border-info" style="width: 50rem;">
+                                    <div class="card-body">
+                                    <h5 class="card-title text-uppercase text-white text-center bg-info">Request Information</h5>
+                                    <span><i class="fas fa-info-circle"></i></span><strong> Request Method:</strong> <span class="badge-outline-success badge badge-success"> POST</span><br>
+                                    <span><i class="fas fa-info-circle"></i></span><strong> Request URL:</strong> <a href="http://www.beta.boltseal.com/sealservices/getSealTripDetailsuser" target="_blank">http://www.beta.boltseal.com/sealservices/getSealTripDetailsuser</a><br>
+                                    </div>
+                                </div>
+                                <div class="card border-info" style="width: 50rem;">
+                                    <div class="card-body">
+                                    <h5 class="card-title text-uppercase text-white text-center bg-info">Response Information</h5>
+                                    <span><i class="fas fa-info-circle"></i></span><strong> Response Code:</strong> <span class="float-right badge-outline badge badge-success"> 200 - OK</span><br>
+                                    <span><i class="fas fa-stopwatch"></i></span><strong> Mean time per request:</strong> <span class="float-right badge-outline badge badge-success"> 405ms</span><br>
+                                    <span><i class="fas fa-database"></i></span><strong> Mean size per request:</strong> <span class="float-right badge-outline badge badge-success"> 22.25KB</span><br>
+                                    <hr>
+                                    <h5 class="card-title text-uppercase text-white text-center bg-info">Test Pass Percentage</h5>
+                                    <div>
+                                        <div class="progress" style="height: 40px;">
+                                            <div class="progress-bar bg-success" style="width: 100%" role="progressbar">
+                                            <h5 class="text-uppercase text-white text-center" style="padding-top:5px;"><strong>No Tests for this request</strong></h5>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    </div>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12 mb-3">
+                                <div class="card-deck">
+                                <div class="card border-info" style="width: 50rem;">
+                                    <div class="card-body">
+                                        <h5 class="card-title text-uppercase text-white text-center bg-info">Request Headers</h5>
+                                        <div class="table-responsive">
+                                            <table class="table table-bordered">
+                                            <thead class="thead-light text-center"><tr><th>Header Name</th><th>Header Value</th></tr></thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <td class="text-nowrap">Authorization</td>
+                                                        <td class="text-wrap">eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjcmVhdGVkRGF0ZSI6IjE3MTA5NTQ2MTYxMzItNjFmYTU1ZGMzNjBkNGQxOGNiNjFiZDM3IiwiaWVjQ29kZSI6IjgyODUzMDIwNzIiLCJ1c2VySWQiOiI2MWZhNTVkYzM2MGQ0ZDE4Y2I2MWJkMzciLCJ1c2VyVHlwZSI6Nywibm9lIjoiQ2hha3JhZGhhciBOT0UiLCJpc0J1eWluZyI6dHJ1ZSwicmVmZXJyZWRCeSI6IkRJUkVDVCIsInBlcm1pc3Npb25zIjpbInNlYWxzdGF0dXMiLCJhZmZpeCIsInVzZXJtYW5hZ2VtZW50IiwidHJpcGxvZ3MiLCJub3RpZmljYXRpb24iLCJzYXZlZCJdLCJpc0FsbFNlZW4iOmZhbHNlLCJpc19jZnNfdXNlciI6dHJ1ZSwiaXNfc2VsZnNlYWxfdXNlciI6dHJ1ZSwiaWF0IjoxNzEwOTU0NjE2LCJleHAiOjE3MTE4MTg2MTZ9.TuER3lldFGhs8bloU20OsQ7I3-1fo5rGt5PBwAaojRU</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">Content-Type</td>
+                                                        <td class="text-wrap">application/json</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">User-Agent</td>
+                                                        <td class="text-wrap">PostmanRuntime/7.37.1</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">Accept</td>
+                                                        <td class="text-wrap">*/*</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">Cache-Control</td>
+                                                        <td class="text-wrap">no-cache</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">Postman-Token</td>
+                                                        <td class="text-wrap">0046eb21-4e74-4fd4-afb9-6478999d450c</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">Host</td>
+                                                        <td class="text-wrap">www.beta.boltseal.com</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">Accept-Encoding</td>
+                                                        <td class="text-wrap">gzip, deflate, br</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">Connection</td>
+                                                        <td class="text-wrap">keep-alive</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">Content-Length</td>
+                                                        <td class="text-wrap">166</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                        <div class="col-sm-12 mb-3">
+                            <div class="card-deck">
+                            <div class="card border-info" style="width: 50rem;">
+                                <div class="card-body">
+                                    <h5 class="card-title text-uppercase text-white text-center bg-info">Request Body</h5>
+                                        <div class="dyn-height">
+                                            <pre><code id="copyReqText-0" class="prettyPrint">{
+            &quot;tripLogWhat&quot;: &quot;self&quot;,
+            &quot;pageSize&quot;: 15,
+            &quot;pageNo&quot;: 1,
+            &quot;status&quot;: &quot;scanned&quot;,
+            &quot;type&quot;: null,
+            &quot;isSelfSealed&quot;: true,
+            &quot;download&quot;: false
+        }</code></pre>
+                                        </div>
+                                        <div class="card-footer">
+                                            <button class="btn btn-outline-secondary btn-sm copyButton" type="button" data-clipboard-action="copy" data-clipboard-target="#copyReqText-0">Copy to Clipboard</button>
+                                        </div>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                        <div class="row">
+                        <div class="col-sm-12 mb-3">
+                            <div class="card-deck">
+                            <div class="card border-info" style="width: 50rem;">
+                                <div class="card-body">
+                                    <h5 class="card-title text-uppercase text-white text-center bg-info">Response Headers</h5>
+                                    <div class="table-responsive">
+                                        <table class="table table-bordered">
+                                        <thead class="thead-light text-center"><tr><th>Header Name</th><th>Header Value</th></tr></thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td class="text-nowrap">Server</td>
+                                                    <td class="text-wrap">nginx/1.14.0 (Ubuntu)</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">Date</td>
+                                                    <td class="text-wrap">Thu, 28 Mar 2024 11:19:29 GMT</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">Content-Type</td>
+                                                    <td class="text-wrap">application/json; charset&#x3D;utf-8</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">Content-Length</td>
+                                                    <td class="text-wrap">22789</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">Connection</td>
+                                                    <td class="text-wrap">keep-alive</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">X-Powered-By</td>
+                                                    <td class="text-wrap">Express</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">Access-Control-Allow-Origin</td>
+                                                    <td class="text-wrap">*</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">ETag</td>
+                                                    <td class="text-wrap">W/&quot;5905-sXQ1BZ3NzHkLc/xxoz/LGXB4Xzk&quot;</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                        <div class="row">
+                        <div class="col-sm-12 mb-3">
+                            <div class="card-deck">
+                            <div class="card border-info" style="width: 50rem;">
+                                <div class="card-body">
+                                    <h5 class="card-title text-uppercase text-white text-center bg-info">Response Body</h5>
+                                        <div class="dyn-height">
+                                                <pre><code id="copyText-d9517815-7870-4191-a6b7-0ae12636c592" class="prettyPrint">{&quot;success&quot;:true,&quot;count&quot;:252,&quot;_data&quot;:[{&quot;iceToSealAssignStatus&quot;:&quot;F&quot;,&quot;isflagCheckReader&quot;:false,&quot;sealType&quot;:&quot;1&quot;,&quot;exceluploaddate&quot;:&quot;2021-07-08T06:44:48.114Z&quot;,&quot;cfsStuffingPort&quot;:[],&quot;cfsSentBy&quot;:[],&quot;otherIec&quot;:[],&quot;isShared&quot;:false,&quot;emailSent&quot;:true,&quot;tidMail&quot;:false,&quot;ewaybills&quot;:[&quot;NOT_REQUIRED&quot;],&quot;cfsCOSent&quot;:false,&quot;cfsCSSent&quot;:false,&quot;seal_factory_type&quot;:&quot;chinese&quot;,&quot;isPortToCfs&quot;:false,&quot;stage&quot;:0,&quot;_id&quot;:&quot;60e7fa74a3e320703de94b7f&quot;,&quot;__v&quot;:0,&quot;boxNumber&quot;:&quot;BT7224560&quot;,&quot;eSerialNumber&quot;:&quot;BOLT02325598&quot;,&quot;tid&quot;:&quot;e200341401180302781748dd&quot;,&quot;ordersealType&quot;:&quot;self&quot;,&quot;shippingBill&quot;:[{&quot;ewaybills&quot;:[],&quot;shippingBillNumber&quot;:3456785,&quot;shippingBillDate&quot;:&quot;2024-03-14T00:00:00.000Z&quot;}],&quot;cfs_Stuffing_Place&quot;:&quot;&quot;,&quot;destination_Port&quot;:&quot;642d1d0df0ca495ce46e6ac8&quot;,&quot;final_Destination_Port&quot;:&quot;642d1d0df0ca495ce46e6ac8&quot;,&quot;port_Custom_clearance&quot;:&quot;&quot;,&quot;port_id&quot;:&quot;642d1d0df0ca495ce46e6ac8&quot;,&quot;scan_Location&quot;:&quot;&quot;,&quot;createdAt&quot;:&quot;2023-02-14T09:53:35.414Z&quot;,&quot;iecCode&quot;:&quot;8285302072&quot;,&quot;noe&quot;:&quot;Anurag Exporter&quot;,&quot;orderId&quot;:&quot;022023-14BT-1001347&quot;,&quot;orderTagDate&quot;:&quot;2023-02-14T09:53:35.414Z&quot;,&quot;previousStatus&quot;:&quot;save&quot;,&quot;status&quot;:&quot;confirm&quot;,&quot;updatedAt&quot;:&quot;2024-03-22T06:49:59.510Z&quot;,&quot;containerNo&quot;:&quot;JHHY3456787&quot;,&quot;dataEntryTime&quot;:&quot;2024-03-22T06:49:58.950Z&quot;,&quot;dateOfSealing&quot;:&quot;2024-02-17T00:00:00.000Z&quot;,&quot;destinationPort&quot;:&quot;INMUN1&quot;,&quot;finalDestinationPort&quot;:&quot;INMUN1&quot;,&quot;methodused&quot;:&quot;UI-/confirmseal&quot;,&quot;portId&quot;:&quot;INMUN1&quot;,&quot;timeOfSealing&quot;:&quot;02:15&quot;,&quot;transportation_mode&quot;:&quot;truck&quot;,&quot;truckNo&quot;:&quot;3456786543567&quot;,&quot;importers&quot;:[],&quot;cfsScanData&quot;:[],&quot;mxcsScanData&quot;:[],&quot;portScanData&quot;:[],&quot;subUser&quot;:&quot;Admin&quot;},{&quot;iceToSealAssignStatus&quot;:&quot;F&quot;,&quot;isflagCheckReader&quot;:false,&quot;sealType&quot;:&quot;1&quot;,&quot;exceluploaddate&quot;:&quot;2021-07-08T06:44:48.114Z&quot;,&quot;cfsStuffingPort&quot;:[],&quot;cfsSentBy&quot;:[],&quot;otherIec&quot;:[],&quot;isShared&quot;:false,&quot;emailSent&quot;:true,&quot;tidMail&quot;:false,&quot;ewaybills&quot;:[&quot;NOT_REQUIRED&quot;],&quot;cfsCOSent&quot;:false,&quot;cfsCSSent&quot;:false,&quot;seal_factory_type&quot;:&quot;chinese&quot;,&quot;isPortToCfs&quot;:false,&quot;stage&quot;:0,&quot;_id&quot;:&quot;60e7fa79a3e320703de955d8&quot;,&quot;__v&quot;:0,&quot;boxNumber&quot;:&quot;BT7224825&quot;,&quot;eSerialNumber&quot;:&quot;BOLT02328247&quot;,&quot;tid&quot;:&quot;e2003414011503027814a6d7&quot;,&quot;ordersealType&quot;:&quot;self&quot;,&quot;shippingBill&quot;:[{&quot;ewaybills&quot;:[],&quot;shippingBillNumber&quot;:3456785,&quot;shippingBillDate&quot;:&quot;2024-02-18T00:00:00.000Z&quot;}],&quot;cfs_Stuffing_Place&quot;:&quot;&quot;,&quot;destination_Port&quot;:&quot;642d1d0df0ca495ce46e6ac8&quot;,&quot;final_Destination_Port&quot;:&quot;642d1d0df0ca495ce46e6ac8&quot;,&quot;port_Custom_clearance&quot;:&quot;&quot;,&quot;port_id&quot;:&quot;642d1d0df0ca495ce46e6ac8&quot;,&quot;scan_Location&quot;:&quot;&quot;,&quot;direct_assignedAt&quot;:&quot;2022-09-26T09:32:17.115Z&quot;,&quot;direct_box_assign&quot;:true,&quot;iecCode&quot;:&quot;8285302072&quot;,&quot;noe&quot;:&quot;Anurag Exporter&quot;,&quot;status&quot;:&quot;confirm&quot;,&quot;updatedAt&quot;:&quot;2024-03-21T03:49:07.928Z&quot;,&quot;containerNo&quot;:&quot;JHHY3456787&quot;,&quot;dataEntryTime&quot;:&quot;2024-03-21T03:49:07.767Z&quot;,&quot;dateOfSealing&quot;:&quot;2024-03-03T00:00:00.000Z&quot;,&quot;destinationPort&quot;:&quot;INMUN1&quot;,&quot;finalDestinationPort&quot;:&quot;INMUN1&quot;,&quot;methodused&quot;:&quot;UI-/confirmseal&quot;,&quot;portId&quot;:&quot;INMUN1&quot;,&quot;previousStatus&quot;:&quot;save&quot;,&quot;timeOfSealing&quot;:&quot;01:16&quot;,&quot;transportation_mode&quot;:&quot;truck&quot;,&quot;truckNo&quot;:&quot;796876097343&quot;,&quot;importers&quot;:[],&quot;cfsScanData&quot;:[],&quot;mxcsScanData&quot;:[],&quot;portScanData&quot;:[],&quot;subUser&quot;:&quot;Admin&quot;},{&quot;iceToSealAssignStatus&quot;:&quot;F&quot;,&quot;isflagCheckReader&quot;:false,&quot;sealType&quot;:&quot;1&quot;,&quot;exceluploaddate&quot;:&quot;2021-07-08T06:44:48.114Z&quot;,&quot;cfsStuffingPort&quot;:[],&quot;cfsSentBy&quot;:[],&quot;otherIec&quot;:[],&quot;isShared&quot;:false,&quot;emailSent&quot;:true,&quot;tidMail&quot;:false,&quot;ewaybills&quot;:[&quot;NOT_REQUIRED&quot;],&quot;cfsCOSent&quot;:false,&quot;cfsCSSent&quot;:false,&quot;seal_factory_type&quot;:&quot;chinese&quot;,&quot;isPortToCfs&quot;:false,&quot;stage&quot;:0,&quot;_id&quot;:&quot;60e7fa79a3e320703de955d7&quot;,&quot;__v&quot;:0,&quot;boxNumber&quot;:&quot;BT7224825&quot;,&quot;eSerialNumber&quot;:&quot;BOLT02328246&quot;,&quot;tid&quot;:&quot;e200341401120302781668a7&quot;,&quot;ordersealType&quot;:&quot;self&quot;,&quot;shippingBill&quot;:[{&quot;ewaybills&quot;:[],&quot;shippingBillNumber&quot;:3456785,&quot;shippingBillDate&quot;:&quot;2024-02-17T00:00:00.000Z&quot;}],&quot;cfs_Stuffing_Place&quot;:&quot;&quot;,&quot;destination_Port&quot;:&quot;642d1d0df0ca495ce46e6ac8&quot;,&quot;final_Destination_Port&quot;:&quot;642d1d0df0ca495ce46e6ac8&quot;,&quot;port_Custom_clearance&quot;:&quot;&quot;,&quot;port_id&quot;:&quot;642d1d0df0ca495ce46e6ac8&quot;,&quot;scan_Location&quot;:&quot;&quot;,&quot;direct_assignedAt&quot;:&quot;2022-09-26T09:32:17.115Z&quot;,&quot;direct_box_assign&quot;:true,&quot;iecCode&quot;:&quot;8285302072&quot;,&quot;noe&quot;:&quot;Anurag Exporter&quot;,&quot;status&quot;:&quot;confirm&quot;,&quot;updatedAt&quot;:&quot;2024-03-21T03:44:04.491Z&quot;,&quot;containerNo&quot;:&quot;JHHY3456787&quot;,&quot;dataEntryTime&quot;:&quot;2024-03-21T03:44:04.339Z&quot;,&quot;dateOfSealing&quot;:&quot;2024-03-03T00:00:00.000Z&quot;,&quot;destinationPort&quot;:&quot;INMUN1&quot;,&quot;finalDestinationPort&quot;:&quot;INMUN1&quot;,&quot;methodused&quot;:&quot;UI-/confirmseal&quot;,&quot;portId&quot;:&quot;INMUN1&quot;,&quot;previousStatus&quot;:&quot;save&quot;,&quot;timeOfSealing&quot;:&quot;04:14&quot;,&quot;transportation_mode&quot;:&quot;truck&quot;,&quot;truckNo&quot;:&quot;3456786543567&quot;,&quot;importers&quot;:[],&quot;cfsScanData&quot;:[],&quot;mxcsScanData&quot;:[],&quot;portScanData&quot;:[],&quot;subUser&quot;:&quot;Admin&quot;},{&quot;iceToSealAssignStatus&quot;:&quot;F&quot;,&quot;isflagCheckReader&quot;:false,&quot;sealType&quot;:&quot;1&quot;,&quot;exceluploaddate&quot;:&quot;2021-07-08T06:44:48.114Z&quot;,&quot;cfsStuffingPort&quot;:[],&quot;cfsSentBy&quot;:[],&quot;otherIec&quot;:[],&quot;isShared&quot;:false,&quot;emailSent&quot;:true,&quot;tidMail&quot;:false,&quot;ewaybills&quot;:[&quot;NOT_REQUIRED&quot;],&quot;cfsCOSent&quot;:false,&quot;cfsCSSent&quot;:false,&quot;seal_factory_type&quot;:&quot;chinese&quot;,&quot;isPortToCfs&quot;:false,&quot;stage&quot;:0,&quot;_id&quot;:&quot;60e7fa79a3e320703de955d6&quot;,&quot;__v&quot;:0,&quot;boxNumber&quot;:&quot;BT7224825&quot;,&quot;eSerialNumber&quot;:&quot;BOLT02328245&quot;,&quot;tid&quot;:&quot;e20034140121030278137c97&quot;,&quot;ordersealType&quot;:&quot;self&quot;,&quot;shippingBill&quot;:[{&quot;ewaybills&quot;:[],&quot;shippingBillNumber&quot;:3456785,&quot;shippingBillDate&quot;:&quot;2024-03-06T00:00:00.000Z&quot;}],&quot;cfs_Stuffing_Place&quot;:&quot;&quot;,&quot;destination_Port&quot;:&quot;642d1d0df0ca495ce46e6ac8&quot;,&quot;final_Destination_Port&quot;:&quot;642d1d0df0ca495ce46e6ac8&quot;,&quot;port_Custom_clearance&quot;:&quot;&quot;,&quot;port_id&quot;:&quot;642d1d0df0ca495ce46e6ac8&quot;,&quot;scan_Location&quot;:&quot;&quot;,&quot;direct_assignedAt&quot;:&quot;2022-09-26T09:32:17.115Z&quot;,&quot;direct_box_assign&quot;:true,&quot;iecCode&quot;:&quot;8285302072&quot;,&quot;noe&quot;:&quot;Anurag Exporter&quot;,&quot;status&quot;:&quot;confirm&quot;,&quot;updatedAt&quot;:&quot;2024-03-21T03:33:39.604Z&quot;,&quot;containerNo&quot;:&quot;jhhy3456787&quot;,&quot;dataEntryTime&quot;:&quot;2024-03-21T03:33:39.448Z&quot;,&quot;dateOfSealing&quot;:&quot;2024-03-04T00:00:00.000Z&quot;,&quot;destinationPort&quot;:&quot;INMUN1&quot;,&quot;finalDestinationPort&quot;:&quot;INMUN1&quot;,&quot;methodused&quot;:&quot;UI-/confirmseal&quot;,&quot;portId&quot;:&quot;INMUN1&quot;,&quot;previousStatus&quot;:&quot;save&quot;,&quot;timeOfSealing&quot;:&quot;03:09&quot;,&quot;transportation_mode&quot;:&quot;truck&quot;,&quot;truckNo&quot;:&quot;3456786543567&quot;,&quot;importers&quot;:[],&quot;cfsScanData&quot;:[],&quot;mxcsScanData&quot;:[],&quot;portScanData&quot;:[],&quot;subUser&quot;:&quot;Admin&quot;},{&quot;iceToSealAssignStatus&quot;:&quot;F&quot;,&quot;isflagCheckReader&quot;:false,&quot;sealType&quot;:&quot;1&quot;,&quot;exceluploaddate&quot;:&quot;2021-07-08T06:44:48.114Z&quot;,&quot;cfsStuffingPort&quot;:[],&quot;cfsSentBy&quot;:[],&quot;otherIec&quot;:[],&quot;isShared&quot;:false,&quot;emailSent&quot;:true,&quot;tidMail&quot;:false,&quot;ewaybills&quot;:[&quot;NOT_REQUIRED&quot;],&quot;cfsCOSent&quot;:false,&quot;cfsCSSent&quot;:false,&quot;seal_factory_type&quot;:&quot;chinese&quot;,&quot;isPortToCfs&quot;:false,&quot;stage&quot;:0,&quot;_id&quot;:&quot;60e7fa79a3e320703de955d9&quot;,&quot;__v&quot;:0,&quot;boxNumber&quot;:&quot;BT7224825&quot;,&quot;eSerialNumber&quot;:&quot;BOLT02328248&quot;,&quot;tid&quot;:&quot;e2003414010d03027813df45&quot;,&quot;ordersealType&quot;:&quot;self&quot;,&quot;shippingBill&quot;:[{&quot;ewaybills&quot;:[],&quot;shippingBillNumber&quot;:3456785,&quot;shippingBillDate&quot;:&quot;2024-03-06T00:00:00.000Z&quot;}],&quot;cfs_Stuffing_Place&quot;:&quot;&quot;,&quot;destination_Port&quot;:&quot;642d1d0df0ca495ce46e6ac8&quot;,&quot;final_Destination_Port&quot;:&quot;642d1d0df0ca495ce46e6ac8&quot;,&quot;port_Custom_clearance&quot;:&quot;&quot;,&quot;port_id&quot;:&quot;642d1d0df0ca495ce46e6ac8&quot;,&quot;scan_Location&quot;:&quot;&quot;,&quot;direct_assignedAt&quot;:&quot;2022-09-26T09:32:17.115Z&quot;,&quot;direct_box_assign&quot;:true,&quot;iecCode&quot;:&quot;8285302072&quot;,&quot;noe&quot;:&quot;Anurag Exporter&quot;,&quot;status&quot;:&quot;confirm&quot;,&quot;updatedAt&quot;:&quot;2024-03-21T03:29:34.576Z&quot;,&quot;containerNo&quot;:&quot;jhhy3456787&quot;,&quot;dataEntryTime&quot;:&quot;2024-03-21T03:29:34.332Z&quot;,&quot;dateOfSealing&quot;:&quot;2024-03-04T00:00:00.000Z&quot;,&quot;destinationPort&quot;:&quot;INMUN1&quot;,&quot;finalDestinationPort&quot;:&quot;INMUN1&quot;,&quot;methodused&quot;:&quot;UI-/confirmseal&quot;,&quot;portId&quot;:&quot;INMUN1&quot;,&quot;previousStatus&quot;:&quot;save&quot;,&quot;timeOfSealing&quot;:&quot;03:09&quot;,&quot;transportation_mode&quot;:&quot;truck&quot;,&quot;truckNo&quot;:&quot;3456786543567&quot;,&quot;importers&quot;:[],&quot;cfsScanData&quot;:[],&quot;mxcsScanData&quot;:[],&quot;portScanData&quot;:[],&quot;subUser&quot;:&quot;Admin&quot;},{&quot;iceToSealAssignStatus&quot;:&quot;F&quot;,&quot;isflagCheckReader&quot;:false,&quot;sealType&quot;:&quot;1&quot;,&quot;exceluploaddate&quot;:&quot;2021-07-08T06:44:48.114Z&quot;,&quot;cfsStuffingPort&quot;:[],&quot;cfsSentBy&quot;:[],&quot;otherIec&quot;:[],&quot;isShared&quot;:false,&quot;emailSent&quot;:true,&quot;tidMail&quot;:false,&quot;ewaybills&quot;:[&quot;NOT_REQUIRED&quot;],&quot;cfsCOSent&quot;:false,&quot;cfsCSSent&quot;:false,&quot;seal_factory_type&quot;:&quot;chinese&quot;,&quot;isPortToCfs&quot;:false,&quot;stage&quot;:0,&quot;_id&quot;:&quot;60e7fa7aa3e320703de95856&quot;,&quot;__v&quot;:0,&quot;boxNumber&quot;:&quot;BT7224889&quot;,&quot;eSerialNumber&quot;:&quot;BOLT02325591&quot;,&quot;tid&quot;:&quot;e2003412013102000acaeaf8&quot;,&quot;ordersealType&quot;:&quot;self&quot;,&quot;cfs_Stuffing_Place&quot;:&quot;&quot;,&quot;destination_Port&quot;:&quot;6433a2f7664c516f84660a22&quot;,&quot;final_Destination_Port&quot;:&quot;642d1d0df0ca495ce46e6ac8&quot;,&quot;port_Custom_clearance&quot;:&quot;&quot;,&quot;port_id&quot;:&quot;6433a2f7664c516f84660a22&quot;,&quot;scan_Location&quot;:&quot;642d1d0df0ca495ce46e6ac8&quot;,&quot;createdAt&quot;:&quot;2024-02-23T07:35:06.259Z&quot;,&quot;iecCode&quot;:&quot;8285302072&quot;,&quot;noe&quot;:&quot;Chakradhar NOE&quot;,&quot;orderId&quot;:&quot;022024-22BT-1000527&quot;,&quot;orderTagDate&quot;:&quot;2024-02-23T07:35:06.259Z&quot;,&quot;previousStatus&quot;:&quot;confirm&quot;,&quot;status&quot;:&quot;saved&quot;,&quot;updatedAt&quot;:&quot;2024-03-15T11:29:46.456Z&quot;,&quot;methodused&quot;:&quot;UI-/confirmseal&quot;,&quot;dateOfScan&quot;:&quot;2024-03-15T11:29:46.452Z&quot;,&quot;detailResultOfScan&quot;:&quot;In transit&quot;,&quot;readerImei&quot;:&quot;866828028601380&quot;,&quot;resultOfScan&quot;:&quot;NON-TAMPERED&quot;,&quot;scanCords&quot;:{&quot;lat&quot;:&quot;28.5255323&quot;,&quot;lng&quot;:&quot;77.2755184&quot;,&quot;actualReaderTime&quot;:&quot;&quot;},&quot;scanLocation&quot;:&quot;INMUN1&quot;,&quot;transportation_mode&quot;:&quot;truck&quot;,&quot;containerNo&quot;:&quot;gtqa2345678&quot;,&quot;dataEntryTime&quot;:&quot;2024-03-15T11:28:54.358Z&quot;,&quot;dateOfSealing&quot;:&quot;2024-03-28T00:00:00.000Z&quot;,&quot;destinationPort&quot;:&quot;INCCU1&quot;,&quot;finalDestinationPort&quot;:&quot;INMUN1&quot;,&quot;portId&quot;:&quot;INCCU1&quot;,&quot;shippingBill&quot;:[{&quot;ewaybills&quot;:[],&quot;shippingBillNumber&quot;:9876543,&quot;shippingBillDate&quot;:&quot;2024-03-16T00:00:00.000Z&quot;}],&quot;timeOfSealing&quot;:&quot;21:14&quot;,&quot;truckNo&quot;:&quot;345678765432&quot;,&quot;importers&quot;:[],&quot;cfsScanData&quot;:[],&quot;mxcsScanData&quot;:[],&quot;portScanData&quot;:[],&quot;subUser&quot;:&quot;Admin&quot;},{&quot;iceToSealAssignStatus&quot;:&quot;F&quot;,&quot;isflagCheckReader&quot;:false,&quot;sealType&quot;:&quot;1&quot;,&quot;exceluploaddate&quot;:&quot;2021-07-08T06:44:48.114Z&quot;,&quot;cfsStuffingPort&quot;:[],&quot;cfsSentBy&quot;:[],&quot;otherIec&quot;:[],&quot;isShared&quot;:false,&quot;emailSent&quot;:true,&quot;tidMail&quot;:false,&quot;ewaybills&quot;:[&quot;NOT_REQUIRED&quot;],&quot;cfsCOSent&quot;:false,&quot;cfsCSSent&quot;:false,&quot;seal_factory_type&quot;:&quot;chinese&quot;,&quot;isPortToCfs&quot;:false,&quot;stage&quot;:0,&quot;_id&quot;:&quot;60e7fa7aa3e320703de95852&quot;,&quot;__v&quot;:0,&quot;boxNumber&quot;:&quot;BT7224889&quot;,&quot;eSerialNumber&quot;:&quot;BOLT25000048&quot;,&quot;tid&quot;:&quot;e28011602000606276bf0917&quot;,&quot;ordersealType&quot;:&quot;self&quot;,&quot;cfs_Stuffing_Place&quot;:&quot;&quot;,&quot;destination_Port&quot;:&quot;65c0bd0cb9401b74435f16b5&quot;,&quot;final_Destination_Port&quot;:&quot;65c1c850b9401b74435f19e7&quot;,&quot;port_Custom_clearance&quot;:&quot;&quot;,&quot;port_id&quot;:&quot;65c0bd0cb9401b74435f16b5&quot;,&quot;scan_Location&quot;:&quot;6433a2f7664c516f84660a22&quot;,&quot;createdAt&quot;:&quot;2024-02-23T07:35:06.259Z&quot;,&quot;iecCode&quot;:&quot;8285302072&quot;,&quot;noe&quot;:&quot;Chakradhar NOE&quot;,&quot;orderId&quot;:&quot;022024-22BT-1000527&quot;,&quot;orderTagDate&quot;:&quot;2024-02-23T07:35:06.259Z&quot;,&quot;previousStatus&quot;:&quot;confirm&quot;,&quot;status&quot;:&quot;saved&quot;,&quot;updatedAt&quot;:&quot;2024-03-15T10:51:16.527Z&quot;,&quot;methodused&quot;:&quot;UI-/confirmseal&quot;,&quot;portId&quot;:&quot;INJKL6&quot;,&quot;transportation_mode&quot;:&quot;truck&quot;,&quot;dateOfScan&quot;:&quot;2024-03-15T10:51:16.525Z&quot;,&quot;detailResultOfScan&quot;:&quot;In transit&quot;,&quot;readerImei&quot;:&quot;353471045172273&quot;,&quot;resultOfScan&quot;:&quot;NON-TAMPERED&quot;,&quot;scanCords&quot;:{&quot;lat&quot;:&quot;28.5255069&quot;,&quot;lng&quot;:&quot;77.2755432&quot;,&quot;actualReaderTime&quot;:&quot;&quot;},&quot;scanLocation&quot;:&quot;INCCU1&quot;,&quot;tampered_details&quot;:{&quot;name&quot;:&quot;shilpi&quot;,&quot;mobile&quot;:&quot;8527824155&quot;,&quot;email&quot;:&quot;&quot;,&quot;performed_at&quot;:&quot;2024-03-14T07:02:09.672Z&quot;},&quot;containerNo&quot;:&quot;derf2345673&quot;,&quot;dataEntryTime&quot;:&quot;2024-03-15T10:50:38.133Z&quot;,&quot;dateOfSealing&quot;:&quot;2024-03-02T00:00:00.000Z&quot;,&quot;destinationPort&quot;:&quot;INJKL6&quot;,&quot;finalDestinationPort&quot;:&quot;inghj1&quot;,&quot;shippingBill&quot;:[{&quot;ewaybills&quot;:[],&quot;shippingBillNumber&quot;:5678234,&quot;shippingBillDate&quot;:&quot;2024-02-18T00:00:00.000Z&quot;}],&quot;timeOfSealing&quot;:&quot;02:02&quot;,&quot;truckNo&quot;:&quot;32456756&quot;,&quot;importers&quot;:[],&quot;cfsScanData&quot;:[],&quot;mxcsScanData&quot;:[],&quot;portScanData&quot;:[],&quot;subUser&quot;:&quot;Admin&quot;},{&quot;iceToSealAssignStatus&quot;:&quot;F&quot;,&quot;isflagCheckReader&quot;:false,&quot;sealType&quot;:&quot;1&quot;,&quot;exceluploaddate&quot;:&quot;2021-07-08T06:44:48.114Z&quot;,&quot;cfsStuffingPort&quot;:[],&quot;cfsSentBy&quot;:[],&quot;otherIec&quot;:[],&quot;isShared&quot;:false,&quot;emailSent&quot;:true,&quot;tidMail&quot;:false,&quot;ewaybills&quot;:[&quot;NOT_REQUIRED&quot;],&quot;cfsCOSent&quot;:false,&quot;cfsCSSent&quot;:false,&quot;seal_factory_type&quot;:&quot;chinese&quot;,&quot;isPortToCfs&quot;:false,&quot;stage&quot;:0,&quot;_id&quot;:&quot;60e7fa7aa3e320703de95853&quot;,&quot;__v&quot;:0,&quot;boxNumber&quot;:&quot;BT7224889&quot;,&quot;eSerialNumber&quot;:&quot;BOLT50586334&quot;,&quot;tid&quot;:&quot;e200381160006011043428b4&quot;,&quot;ordersealType&quot;:&quot;self&quot;,&quot;cfs_Stuffing_Place&quot;:&quot;&quot;,&quot;destination_Port&quot;:&quot;65c0bd0cb9401b74435f16b5&quot;,&quot;final_Destination_Port&quot;:&quot;65c1c850b9401b74435f19e7&quot;,&quot;port_Custom_clearance&quot;:&quot;&quot;,&quot;port_id&quot;:&quot;65c0bd0cb9401b74435f16b5&quot;,&quot;scan_Location&quot;:&quot;64ccc31c1e7568db88f4d85e&quot;,&quot;createdAt&quot;:&quot;2024-02-23T07:35:06.259Z&quot;,&quot;iecCode&quot;:&quot;8285302072&quot;,&quot;noe&quot;:&quot;Chakradhar NOE&quot;,&quot;orderId&quot;:&quot;022024-22BT-1000527&quot;,&quot;orderTagDate&quot;:&quot;2024-02-23T07:35:06.259Z&quot;,&quot;previousStatus&quot;:&quot;confirm&quot;,&quot;status&quot;:&quot;saved&quot;,&quot;updatedAt&quot;:&quot;2024-03-13T10:51:39.739Z&quot;,&quot;methodused&quot;:&quot;UI-/confirmseal&quot;,&quot;transportation_mode&quot;:&quot;truck&quot;,&quot;dateOfScan&quot;:&quot;2024-03-13T10:51:39.736Z&quot;,&quot;detailResultOfScan&quot;:&quot;In transit&quot;,&quot;readerImei&quot;:&quot;862951032280928&quot;,&quot;resultOfScan&quot;:&quot;NON-TAMPERED&quot;,&quot;scanCords&quot;:{&quot;lat&quot;:&quot;0.0&quot;,&quot;lng&quot;:&quot;0.0&quot;,&quot;actualReaderTime&quot;:&quot;&quot;},&quot;scanLocation&quot;:&quot;INMAA1STL1&quot;,&quot;containerNo&quot;:&quot;detr3456789&quot;,&quot;dataEntryTime&quot;:&quot;2024-03-13T10:50:34.381Z&quot;,&quot;dateOfSealing&quot;:&quot;2024-03-15T00:00:00.000Z&quot;,&quot;destinationPort&quot;:&quot;INJKL6&quot;,&quot;finalDestinationPort&quot;:&quot;inghj1&quot;,&quot;portId&quot;:&quot;INJKL6&quot;,&quot;shippingBill&quot;:[{&quot;ewaybills&quot;:[],&quot;shippingBillNumber&quot;:4564566,&quot;shippingBillDate&quot;:&quot;2024-03-18T00:00:00.000Z&quot;}],&quot;timeOfSealing&quot;:&quot;10:16&quot;,&quot;truckNo&quot;:&quot;234567890&quot;,&quot;importers&quot;:[],&quot;cfsScanData&quot;:[],&quot;mxcsScanData&quot;:[],&quot;portScanData&quot;:[],&quot;subUser&quot;:&quot;Admin&quot;},{&quot;iceToSealAssignStatus&quot;:&quot;F&quot;,&quot;isflagCheckReader&quot;:false,&quot;sealType&quot;:&quot;1&quot;,&quot;exceluploaddate&quot;:&quot;2021-07-08T06:44:48.114Z&quot;,&quot;cfsStuffingPort&quot;:[],&quot;cfsSentBy&quot;:[],&quot;otherIec&quot;:[],&quot;isShared&quot;:false,&quot;emailSent&quot;:true,&quot;tidMail&quot;:false,&quot;ewaybills&quot;:[&quot;NOT_REQUIRED&quot;],&quot;cfsCOSent&quot;:false,&quot;cfsCSSent&quot;:false,&quot;seal_factory_type&quot;:&quot;chinese&quot;,&quot;isPortToCfs&quot;:false,&quot;stage&quot;:0,&quot;_id&quot;:&quot;60e7fa7aa3e320703de95855&quot;,&quot;__v&quot;:0,&quot;boxNumber&quot;:&quot;BT7224889&quot;,&quot;eSerialNumber&quot;:&quot;BOLT50579426&quot;,&quot;tid&quot;:&quot;e200381160006011040f3691&quot;,&quot;ordersealType&quot;:&quot;self&quot;,&quot;cfs_Stuffing_Place&quot;:&quot;&quot;,&quot;destination_Port&quot;:&quot;656465a539c138075729f2d6&quot;,&quot;final_Destination_Port&quot;:&quot;656465a539c138075729f2d6&quot;,&quot;port_Custom_clearance&quot;:&quot;&quot;,&quot;port_id&quot;:&quot;656465a539c138075729f2d6&quot;,&quot;scan_Location&quot;:&quot;65c0bd0cb9401b74435f16b5&quot;,&quot;createdAt&quot;:&quot;2024-02-23T07:35:06.259Z&quot;,&quot;iecCode&quot;:&quot;8285302072&quot;,&quot;noe&quot;:&quot;Chakradhar NOE&quot;,&quot;orderId&quot;:&quot;022024-22BT-1000527&quot;,&quot;orderTagDate&quot;:&quot;2024-02-23T07:35:06.259Z&quot;,&quot;previousStatus&quot;:&quot;confirm&quot;,&quot;status&quot;:&quot;saved&quot;,&quot;updatedAt&quot;:&quot;2024-03-12T09:40:46.791Z&quot;,&quot;methodused&quot;:&quot;UI-/confirmseal&quot;,&quot;transportation_mode&quot;:&quot;truck&quot;,&quot;dateOfScan&quot;:&quot;2024-03-12T09:40:46.787Z&quot;,&quot;detailResultOfScan&quot;:&quot;In transit&quot;,&quot;readerImei&quot;:&quot;866828028598214&quot;,&quot;resultOfScan&quot;:&quot;NON-TAMPERED&quot;,&quot;scanCords&quot;:{&quot;lat&quot;:&quot;28.525612659514152&quot;,&quot;lng&quot;:&quot;77.27550453251524&quot;,&quot;actualReaderTime&quot;:&quot;&quot;},&quot;scanLocation&quot;:&quot;INJKL6&quot;,&quot;tampered_details&quot;:{&quot;name&quot;:&quot;shilpi&quot;,&quot;mobile&quot;:&quot;&quot;,&quot;email&quot;:&quot;shilpi.g@lynkit.in&quot;,&quot;performed_at&quot;:&quot;2024-03-12T07:24:29.136Z&quot;},&quot;containerNo&quot;:&quot;swer3452345&quot;,&quot;dataEntryTime&quot;:&quot;2024-03-12T08:05:31.633Z&quot;,&quot;dateOfSealing&quot;:&quot;2024-02-17T00:00:00.000Z&quot;,&quot;destinationPort&quot;:&quot;inpor1&quot;,&quot;finalDestinationPort&quot;:&quot;inpor1&quot;,&quot;portId&quot;:&quot;inpor1&quot;,&quot;shippingBill&quot;:[{&quot;ewaybills&quot;:[],&quot;shippingBillNumber&quot;:3456789,&quot;shippingBillDate&quot;:&quot;2024-03-18T00:00:00.000Z&quot;}],&quot;timeOfSealing&quot;:&quot;11:16&quot;,&quot;truckNo&quot;:&quot;2345678&quot;,&quot;importers&quot;:[],&quot;cfsScanData&quot;:[],&quot;mxcsScanData&quot;:[],&quot;portScanData&quot;:[],&quot;subUser&quot;:&quot;Admin&quot;},{&quot;iceToSealAssignStatus&quot;:&quot;F&quot;,&quot;isflagCheckReader&quot;:false,&quot;sealType&quot;:&quot;1&quot;,&quot;exceluploaddate&quot;:&quot;2021-07-08T06:44:48.114Z&quot;,&quot;cfsStuffingPort&quot;:[],&quot;cfsSentBy&quot;:[],&quot;otherIec&quot;:[],&quot;isShared&quot;:false,&quot;emailSent&quot;:true,&quot;tidMail&quot;:false,&quot;ewaybills&quot;:[&quot;NOT_REQUIRED&quot;],&quot;cfsCOSent&quot;:false,&quot;cfsCSSent&quot;:false,&quot;seal_factory_type&quot;:&quot;chinese&quot;,&quot;isPortToCfs&quot;:false,&quot;stage&quot;:0,&quot;_id&quot;:&quot;60e7fa74a3e320703de94b7d&quot;,&quot;__v&quot;:0,&quot;boxNumber&quot;:&quot;BT7224560&quot;,&quot;eSerialNumber&quot;:&quot;BOLT02325596&quot;,&quot;tid&quot;:&quot;e200341401170302781496f0&quot;,&quot;ordersealType&quot;:&quot;self&quot;,&quot;shippingBill&quot;:[{&quot;ewaybills&quot;:[],&quot;shippingBillNumber&quot;:4543654,&quot;shippingBillDate&quot;:&quot;2024-02-29T00:00:00.000Z&quot;}],&quot;cfs_Stuffing_Place&quot;:&quot;&quot;,&quot;destination_Port&quot;:&quot;642d1d0df0ca495ce46e6ac8&quot;,&quot;final_Destination_Port&quot;:&quot;65c0bdb7b9401b74435f16cd&quot;,&quot;port_Custom_clearance&quot;:&quot;&quot;,&quot;port_id&quot;:&quot;642d1d0df0ca495ce46e6ac8&quot;,&quot;scan_Location&quot;:&quot;&quot;,&quot;createdAt&quot;:&quot;2023-02-14T09:53:35.414Z&quot;,&quot;iecCode&quot;:&quot;8285302072&quot;,&quot;noe&quot;:&quot;Anurag Exporter&quot;,&quot;orderId&quot;:&quot;022023-14BT-1001347&quot;,&quot;orderTagDate&quot;:&quot;2023-02-14T09:53:35.414Z&quot;,&quot;previousStatus&quot;:&quot;saved&quot;,&quot;status&quot;:&quot;confirm&quot;,&quot;updatedAt&quot;:&quot;2024-03-04T09:18:37.993Z&quot;,&quot;cfsStuffingPlace&quot;:&quot;&quot;,&quot;containerNo&quot;:&quot;cmjh8736432&quot;,&quot;containerVerified&quot;:0,&quot;dataEntryTime&quot;:&quot;2024-03-04T09:18:37.938Z&quot;,&quot;dateOfSealing&quot;:&quot;2024-02-29T00:00:00.000Z&quot;,&quot;destinationPort&quot;:&quot;INMUN1&quot;,&quot;finalDestinationPort&quot;:&quot;INPOR1&quot;,&quot;portCustomclearance&quot;:&quot;&quot;,&quot;portId&quot;:&quot;INMUN1&quot;,&quot;timeOfSealing&quot;:&quot;02:03&quot;,&quot;truckNo&quot;:&quot;hg678346gj&quot;,&quot;methodused&quot;:&quot;UI-/confirmseal&quot;,&quot;transportation_mode&quot;:&quot;truck&quot;,&quot;importers&quot;:[],&quot;cfsScanData&quot;:[],&quot;mxcsScanData&quot;:[],&quot;portScanData&quot;:[],&quot;subUser&quot;:&quot;Admin&quot;},{&quot;iceToSealAssignStatus&quot;:&quot;F&quot;,&quot;isflagCheckReader&quot;:false,&quot;sealType&quot;:&quot;1&quot;,&quot;exceluploaddate&quot;:&quot;2021-07-08T06:44:48.114Z&quot;,&quot;cfsStuffingPort&quot;:[],&quot;cfsSentBy&quot;:[],&quot;otherIec&quot;:[],&quot;isShared&quot;:false,&quot;emailSent&quot;:false,&quot;tidMail&quot;:false,&quot;ewaybills&quot;:[&quot;123456789123&quot;],&quot;cfsCOSent&quot;:false,&quot;cfsCSSent&quot;:false,&quot;seal_factory_type&quot;:&quot;chinese&quot;,&quot;isPortToCfs&quot;:false,&quot;stage&quot;:0,&quot;_id&quot;:&quot;60e7fa74a3e320703de94b7e&quot;,&quot;__v&quot;:0,&quot;boxNumber&quot;:&quot;BT7224560&quot;,&quot;eSerialNumber&quot;:&quot;BOLT02325597&quot;,&quot;tid&quot;:&quot;e200341401200302781833fb&quot;,&quot;ordersealType&quot;:&quot;self&quot;,&quot;shippingBill&quot;:[{&quot;ewaybills&quot;:[],&quot;shippingBillNumber&quot;:1234679,&quot;shippingBillDate&quot;:&quot;2024-02-29T00:00:00.000Z&quot;}],&quot;cfs_Stuffing_Place&quot;:&quot;&quot;,&quot;destination_Port&quot;:&quot;6433a2f7664c516f84660a22&quot;,&quot;final_Destination_Port&quot;:&quot;6433a2f7664c516f84660a22&quot;,&quot;port_Custom_clearance&quot;:&quot;&quot;,&quot;port_id&quot;:&quot;6433a2f7664c516f84660a22&quot;,&quot;scan_Location&quot;:&quot;&quot;,&quot;createdAt&quot;:&quot;2023-02-14T09:53:35.414Z&quot;,&quot;iecCode&quot;:&quot;8285302072&quot;,&quot;noe&quot;:&quot;Anurag Exporter&quot;,&quot;orderId&quot;:&quot;022023-14BT-1001347&quot;,&quot;orderTagDate&quot;:&quot;2023-02-14T09:53:35.414Z&quot;,&quot;previousStatus&quot;:&quot;save&quot;,&quot;status&quot;:&quot;confirm&quot;,&quot;updatedAt&quot;:&quot;2024-02-29T07:55:35.871Z&quot;,&quot;containerNo&quot;:&quot;FGHJ1872978&quot;,&quot;dataEntryTime&quot;:&quot;2024-02-29T07:55:35.853Z&quot;,&quot;dateOfSealing&quot;:&quot;2024-02-29T00:00:00.000Z&quot;,&quot;destinationPort&quot;:&quot;INCCU1&quot;,&quot;finalDestinationPort&quot;:&quot;INCCU1&quot;,&quot;methodused&quot;:&quot;Excelupload&quot;,&quot;portId&quot;:&quot;INCCU1&quot;,&quot;timeOfSealing&quot;:&quot;10:12&quot;,&quot;truckNo&quot;:&quot;RT19GC3989&quot;,&quot;importers&quot;:[],&quot;cfsScanData&quot;:[],&quot;mxcsScanData&quot;:[],&quot;portScanData&quot;:[],&quot;subUser&quot;:&quot;Admin&quot;},{&quot;iceToSealAssignStatus&quot;:&quot;F&quot;,&quot;isflagCheckReader&quot;:false,&quot;sealType&quot;:&quot;1&quot;,&quot;exceluploaddate&quot;:&quot;2021-07-06T05:36:01.233Z&quot;,&quot;cfsStuffingPort&quot;:[],&quot;cfsSentBy&quot;:[],&quot;otherIec&quot;:[],&quot;isShared&quot;:false,&quot;emailSent&quot;:false,&quot;tidMail&quot;:false,&quot;ewaybills&quot;:[&quot;&quot;],&quot;cfsCOSent&quot;:false,&quot;cfsCSSent&quot;:false,&quot;seal_factory_type&quot;:&quot;indian&quot;,&quot;isPortToCfs&quot;:false,&quot;stage&quot;:0,&quot;_id&quot;:&quot;60e3fbfe646914349583fcd8&quot;,&quot;__v&quot;:0,&quot;boxNumber&quot;:&quot;BT1000814&quot;,&quot;eSerialNumber&quot;:&quot;BOLT50008132&quot;,&quot;tid&quot;:&quot;e2801160200063a676d10916&quot;,&quot;ordersealType&quot;:&quot;self&quot;,&quot;shippingBill&quot;:[{&quot;ewaybills&quot;:[],&quot;shippingBillNumber&quot;:null,&quot;shippingBillDate&quot;:&quot;2024-02-29T00:00:00.000Z&quot;}],&quot;cfs_Stuffing_Place&quot;:&quot;&quot;,&quot;destination_Port&quot;:&quot;642c290e1aa549027f4035f0&quot;,&quot;final_Destination_Port&quot;:&quot;&quot;,&quot;port_Custom_clearance&quot;:&quot;&quot;,&quot;port_id&quot;:&quot;642c290e1aa549027f4035f0&quot;,&quot;scan_Location&quot;:&quot;&quot;,&quot;createdAt&quot;:&quot;2022-09-28T10:39:38.028Z&quot;,&quot;iecCode&quot;:&quot;8285302072&quot;,&quot;noe&quot;:&quot;Anurag Exporter&quot;,&quot;orderId&quot;:&quot;092022-28BT-1001244&quot;,&quot;orderTagDate&quot;:&quot;2022-09-28T10:39:38.028Z&quot;,&quot;previousStatus&quot;:&quot;saved&quot;,&quot;status&quot;:&quot;saved&quot;,&quot;updatedAt&quot;:&quot;2024-02-29T07:21:43.656Z&quot;,&quot;assignedTo&quot;:&quot;65019852a3fd39b5dc353869&quot;,&quot;cfsStuffingPlace&quot;:&quot;&quot;,&quot;containerNo&quot;:&quot;&quot;,&quot;containerVerified&quot;:0,&quot;dataEntryTime&quot;:&quot;2024-02-29T07:21:43.653Z&quot;,&quot;dateOfSealing&quot;:&quot;2024-02-29T00:00:00.000Z&quot;,&quot;destinationPort&quot;:&quot;INCHK6&quot;,&quot;finalDestinationPort&quot;:&quot;&quot;,&quot;portCustomclearance&quot;:&quot;&quot;,&quot;portId&quot;:&quot;INCHK6&quot;,&quot;savedId&quot;:2589623311,&quot;timeOfSealing&quot;:&quot;&quot;,&quot;truckNo&quot;:&quot;&quot;,&quot;importers&quot;:[],&quot;cfsScanData&quot;:[],&quot;mxcsScanData&quot;:[],&quot;portScanData&quot;:[],&quot;subUser&quot;:&quot;test user&quot;},{&quot;iceToSealAssignStatus&quot;:&quot;F&quot;,&quot;isflagCheckReader&quot;:false,&quot;sealType&quot;:&quot;1&quot;,&quot;exceluploaddate&quot;:&quot;2021-07-08T06:44:48.114Z&quot;,&quot;cfsStuffingPort&quot;:[],&quot;cfsSentBy&quot;:[],&quot;otherIec&quot;:[],&quot;isShared&quot;:false,&quot;emailSent&quot;:false,&quot;tidMail&quot;:false,&quot;ewaybills&quot;:[&quot;NOT_REQUIRED&quot;],&quot;cfsCOSent&quot;:false,&quot;cfsCSSent&quot;:false,&quot;seal_factory_type&quot;:&quot;chinese&quot;,&quot;isPortToCfs&quot;:false,&quot;stage&quot;:0,&quot;_id&quot;:&quot;60e7fa74a3e320703de94b7c&quot;,&quot;__v&quot;:0,&quot;boxNumber&quot;:&quot;BT7224560&quot;,&quot;eSerialNumber&quot;:&quot;BOLT02325595&quot;,&quot;tid&quot;:&quot;e20034140120030278150345&quot;,&quot;ordersealType&quot;:&quot;self&quot;,&quot;shippingBill&quot;:[{&quot;ewaybills&quot;:[],&quot;shippingBillNumber&quot;:5547676,&quot;shippingBillDate&quot;:&quot;2024-02-29T00:00:00.000Z&quot;}],&quot;cfs_Stuffing_Place&quot;:&quot;&quot;,&quot;destination_Port&quot;:&quot;6433a2f7664c516f84660a22&quot;,&quot;final_Destination_Port&quot;:&quot;6433a2f7664c516f84660a22&quot;,&quot;port_Custom_clearance&quot;:&quot;&quot;,&quot;port_id&quot;:&quot;6433a2f7664c516f84660a22&quot;,&quot;scan_Location&quot;:&quot;&quot;,&quot;createdAt&quot;:&quot;2023-02-14T09:53:35.414Z&quot;,&quot;iecCode&quot;:&quot;8285302072&quot;,&quot;noe&quot;:&quot;Anurag Exporter&quot;,&quot;orderId&quot;:&quot;022023-14BT-1001347&quot;,&quot;orderTagDate&quot;:&quot;2023-02-14T09:53:35.414Z&quot;,&quot;previousStatus&quot;:&quot;saved&quot;,&quot;status&quot;:&quot;saved&quot;,&quot;updatedAt&quot;:&quot;2024-02-29T06:54:38.219Z&quot;,&quot;cfsStuffingPlace&quot;:&quot;&quot;,&quot;containerNo&quot;:&quot;SDER5454643&quot;,&quot;containerVerified&quot;:0,&quot;dataEntryTime&quot;:&quot;2024-02-29T06:54:38.216Z&quot;,&quot;dateOfSealing&quot;:&quot;2024-02-29T00:00:00.000Z&quot;,&quot;destinationPort&quot;:&quot;INCCU1&quot;,&quot;finalDestinationPort&quot;:&quot;INCCU1&quot;,&quot;portCustomclearance&quot;:&quot;&quot;,&quot;portId&quot;:&quot;INCCU1&quot;,&quot;savedId&quot;:6327909378,&quot;timeOfSealing&quot;:&quot;01:04&quot;,&quot;truckNo&quot;:&quot;&quot;,&quot;importers&quot;:[],&quot;cfsScanData&quot;:[],&quot;mxcsScanData&quot;:[],&quot;portScanData&quot;:[],&quot;subUser&quot;:&quot;Admin&quot;},{&quot;iceToSealAssignStatus&quot;:&quot;F&quot;,&quot;isflagCheckReader&quot;:false,&quot;sealType&quot;:&quot;1&quot;,&quot;exceluploaddate&quot;:&quot;2021-07-08T06:44:48.114Z&quot;,&quot;cfsStuffingPort&quot;:[],&quot;cfsSentBy&quot;:[],&quot;otherIec&quot;:[],&quot;isShared&quot;:false,&quot;emailSent&quot;:true,&quot;tidMail&quot;:false,&quot;ewaybills&quot;:[&quot;445534534534&quot;],&quot;cfsCOSent&quot;:false,&quot;cfsCSSent&quot;:false,&quot;seal_factory_type&quot;:&quot;chinese&quot;,&quot;isPortToCfs&quot;:false,&quot;stage&quot;:0,&quot;_id&quot;:&quot;60e7fa74a3e320703de94b7b&quot;,&quot;__v&quot;:0,&quot;boxNumber&quot;:&quot;BT7224560&quot;,&quot;eSerialNumber&quot;:&quot;BOLT02325594&quot;,&quot;tid&quot;:&quot;e200341401200302781849e7&quot;,&quot;ordersealType&quot;:&quot;self&quot;,&quot;shippingBill&quot;:[{&quot;ewaybills&quot;:[],&quot;shippingBillNumber&quot;:3453453,&quot;shippingBillDate&quot;:&quot;2024-02-29T00:00:00.000Z&quot;}],&quot;cfs_Stuffing_Place&quot;:&quot;&quot;,&quot;destination_Port&quot;:&quot;642c290e1aa549027f4035f0&quot;,&quot;final_Destination_Port&quot;:&quot;656465a539c138075729f2d6&quot;,&quot;port_Custom_clearance&quot;:&quot;&quot;,&quot;port_id&quot;:&quot;642c290e1aa549027f4035f0&quot;,&quot;scan_Location&quot;:&quot;&quot;,&quot;createdAt&quot;:&quot;2023-02-14T09:53:35.414Z&quot;,&quot;iecCode&quot;:&quot;8285302072&quot;,&quot;noe&quot;:&quot;Anurag Exporter&quot;,&quot;orderId&quot;:&quot;022023-14BT-1001347&quot;,&quot;orderTagDate&quot;:&quot;2023-02-14T09:53:35.414Z&quot;,&quot;previousStatus&quot;:&quot;save&quot;,&quot;status&quot;:&quot;confirm&quot;,&quot;updatedAt&quot;:&quot;2024-02-29T06:46:07.023Z&quot;,&quot;containerNo&quot;:&quot;sfdf3456547&quot;,&quot;dataEntryTime&quot;:&quot;2024-02-29T06:46:06.979Z&quot;,&quot;dateOfSealing&quot;:&quot;2024-02-29T00:00:00.000Z&quot;,&quot;destinationPort&quot;:&quot;INCHK6&quot;,&quot;finalDestinationPort&quot;:&quot;inpor1&quot;,&quot;methodused&quot;:&quot;UI-/confirmseal&quot;,&quot;portId&quot;:&quot;INCHK6&quot;,&quot;timeOfSealing&quot;:&quot;00:59&quot;,&quot;transportation_mode&quot;:&quot;truck&quot;,&quot;truckNo&quot;:&quot;64575676878&quot;,&quot;importers&quot;:[],&quot;cfsScanData&quot;:[],&quot;mxcsScanData&quot;:[],&quot;portScanData&quot;:[],&quot;subUser&quot;:&quot;Admin&quot;},{&quot;iceToSealAssignStatus&quot;:&quot;F&quot;,&quot;isflagCheckReader&quot;:false,&quot;sealType&quot;:&quot;1&quot;,&quot;exceluploaddate&quot;:&quot;2021-07-08T06:44:48.114Z&quot;,&quot;cfsStuffingPort&quot;:[],&quot;cfsSentBy&quot;:[],&quot;otherIec&quot;:[],&quot;isShared&quot;:false,&quot;emailSent&quot;:false,&quot;tidMail&quot;:false,&quot;ewaybills&quot;:[],&quot;cfsCOSent&quot;:false,&quot;cfsCSSent&quot;:false,&quot;seal_factory_type&quot;:&quot;chinese&quot;,&quot;isPortToCfs&quot;:false,&quot;stage&quot;:0,&quot;_id&quot;:&quot;60e7fa74a3e320703de94b7a&quot;,&quot;__v&quot;:0,&quot;boxNumber&quot;:&quot;BT7224560&quot;,&quot;eSerialNumber&quot;:&quot;BOLT02325593&quot;,&quot;tid&quot;:&quot;e2003414011903027814e0ff&quot;,&quot;ordersealType&quot;:&quot;self&quot;,&quot;shippingBill&quot;:[{&quot;ewaybills&quot;:[&quot;123456789123&quot;],&quot;shippingBillNumber&quot;:9934679,&quot;shippingBillDate&quot;:&quot;2024-02-29T00:00:00.000Z&quot;},{&quot;ewaybills&quot;:[&quot;142532614256&quot;],&quot;shippingBillNumber&quot;:8965321,&quot;shippingBillDate&quot;:&quot;2024-02-29T00:00:00.000Z&quot;}],&quot;cfs_Stuffing_Place&quot;:&quot;&quot;,&quot;destination_Port&quot;:&quot;6433a2f7664c516f84660a22&quot;,&quot;final_Destination_Port&quot;:&quot;6433a2f7664c516f84660a22&quot;,&quot;port_Custom_clearance&quot;:&quot;&quot;,&quot;port_id&quot;:&quot;6433a2f7664c516f84660a22&quot;,&quot;scan_Location&quot;:&quot;&quot;,&quot;createdAt&quot;:&quot;2023-02-14T09:53:35.414Z&quot;,&quot;iecCode&quot;:&quot;8285302072&quot;,&quot;noe&quot;:&quot;Anurag Exporter&quot;,&quot;orderId&quot;:&quot;022023-14BT-1001347&quot;,&quot;orderTagDate&quot;:&quot;2023-02-14T09:53:35.414Z&quot;,&quot;previousStatus&quot;:&quot;save&quot;,&quot;status&quot;:&quot;confirm&quot;,&quot;updatedAt&quot;:&quot;2024-02-29T05:17:53.510Z&quot;,&quot;containerNo&quot;:&quot;MLSU0000125&quot;,&quot;dataEntryTime&quot;:&quot;2024-02-29T05:17:53.480Z&quot;,&quot;dateOfSealing&quot;:&quot;2024-02-29T00:00:00.000Z&quot;,&quot;destinationPort&quot;:&quot;INCCU1&quot;,&quot;finalDestinationPort&quot;:&quot;INCCU1&quot;,&quot;methodused&quot;:&quot;Excelupload&quot;,&quot;portId&quot;:&quot;INCCU1&quot;,&quot;timeOfSealing&quot;:&quot;10:30&quot;,&quot;truckNo&quot;:&quot;DL12C1234&quot;,&quot;importers&quot;:[],&quot;cfsScanData&quot;:[],&quot;mxcsScanData&quot;:[],&quot;portScanData&quot;:[],&quot;subUser&quot;:&quot;Admin&quot;}]}</code></pre>
+                                        </div>
+                                        <div class="card-footer">
+                                            <button class="btn btn-outline-secondary btn-sm copyButton" type="button" data-clipboard-action="copy" data-clipboard-target="#copyText-d9517815-7870-4191-a6b7-0ae12636c592">Copy to Clipboard</button>
+                                        </div>
+                                </div>
+                            </div>
+                            </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="card border-info">
+                                <div class="card-body">
+                                <h5 class="card-title text-uppercase text-white text-center bg-info">Test Information</h5>
+                                    <h5 class="alert alert-success text-uppercase text-center">No Tests for this request</h5>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+                </div>
+            </div>
+            </div>
+            <div id="folder-04ac430a-6b79-4187-a3dd-18f17bb336a5" class="card-deck iteration-0">
+            <div class="row iteration-0">
+                <div class="col-sm-12 mb-3 iteration-0">
+                <div class="card iteration-0">
+                    <div class="card-header  bg-success iteration-0">
+                        <a data-toggle="collapse" href="#" data-target="#collapse-04ac430a-6b79-4187-a3dd-18f17bb336a5" aria-expanded="false" aria-controls="collapse" id="requests-04ac430a-6b79-4187-a3dd-18f17bb336a5" class="collapsed text-white z-block">
+                    Iteration: 1 - verificationsbandcn <i class="float-lg-right fa fa-chevron-down" style="padding-top: 5px;"></i>
+                </a>
+                    </div>
+                    <div id="collapse-04ac430a-6b79-4187-a3dd-18f17bb336a5" class="collapse" aria-labelledby="requests-04ac430a-6b79-4187-a3dd-18f17bb336a5">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-sm-12 mb-3">
+                                <div class="card-deck">
+                                <div class="card border-info" style="width: 50rem;">
+                                    <div class="card-body">
+                                    <h5 class="card-title text-uppercase text-white text-center bg-info">Request Information</h5>
+                                    <span><i class="fas fa-info-circle"></i></span><strong> Request Method:</strong> <span class="badge-outline-success badge badge-success"> POST</span><br>
+                                    <span><i class="fas fa-info-circle"></i></span><strong> Request URL:</strong> <a href="http://www.beta.boltseal.com/sealservices/verificationsbandcn" target="_blank">http://www.beta.boltseal.com/sealservices/verificationsbandcn</a><br>
+                                    </div>
+                                </div>
+                                <div class="card border-info" style="width: 50rem;">
+                                    <div class="card-body">
+                                    <h5 class="card-title text-uppercase text-white text-center bg-info">Response Information</h5>
+                                    <span><i class="fas fa-info-circle"></i></span><strong> Response Code:</strong> <span class="float-right badge-outline badge badge-success"> 200 - OK</span><br>
+                                    <span><i class="fas fa-stopwatch"></i></span><strong> Mean time per request:</strong> <span class="float-right badge-outline badge badge-success"> 90ms</span><br>
+                                    <span><i class="fas fa-database"></i></span><strong> Mean size per request:</strong> <span class="float-right badge-outline badge badge-success"> 16B</span><br>
+                                    <hr>
+                                    <h5 class="card-title text-uppercase text-white text-center bg-info">Test Pass Percentage</h5>
+                                    <div>
+                                        <div class="progress" style="height: 40px;">
+                                            <div class="progress-bar bg-success" style="width: 100%" role="progressbar">
+                                            <h5 class="text-uppercase text-white text-center" style="padding-top:5px;"><strong>No Tests for this request</strong></h5>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    </div>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12 mb-3">
+                                <div class="card-deck">
+                                <div class="card border-info" style="width: 50rem;">
+                                    <div class="card-body">
+                                        <h5 class="card-title text-uppercase text-white text-center bg-info">Request Headers</h5>
+                                        <div class="table-responsive">
+                                            <table class="table table-bordered">
+                                            <thead class="thead-light text-center"><tr><th>Header Name</th><th>Header Value</th></tr></thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <td class="text-nowrap">Authorization</td>
+                                                        <td class="text-wrap">eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjcmVhdGVkRGF0ZSI6IjE3MTA5NTQ2MTYxMzItNjFmYTU1ZGMzNjBkNGQxOGNiNjFiZDM3IiwiaWVjQ29kZSI6IjgyODUzMDIwNzIiLCJ1c2VySWQiOiI2MWZhNTVkYzM2MGQ0ZDE4Y2I2MWJkMzciLCJ1c2VyVHlwZSI6Nywibm9lIjoiQ2hha3JhZGhhciBOT0UiLCJpc0J1eWluZyI6dHJ1ZSwicmVmZXJyZWRCeSI6IkRJUkVDVCIsInBlcm1pc3Npb25zIjpbInNlYWxzdGF0dXMiLCJhZmZpeCIsInVzZXJtYW5hZ2VtZW50IiwidHJpcGxvZ3MiLCJub3RpZmljYXRpb24iLCJzYXZlZCJdLCJpc0FsbFNlZW4iOmZhbHNlLCJpc19jZnNfdXNlciI6dHJ1ZSwiaXNfc2VsZnNlYWxfdXNlciI6dHJ1ZSwiaWF0IjoxNzEwOTU0NjE2LCJleHAiOjE3MTE4MTg2MTZ9.TuER3lldFGhs8bloU20OsQ7I3-1fo5rGt5PBwAaojRU</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">Content-Type</td>
+                                                        <td class="text-wrap">application/json</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">User-Agent</td>
+                                                        <td class="text-wrap">PostmanRuntime/7.37.1</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">Accept</td>
+                                                        <td class="text-wrap">*/*</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">Cache-Control</td>
+                                                        <td class="text-wrap">no-cache</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">Postman-Token</td>
+                                                        <td class="text-wrap">3842cffd-05c9-41ff-b389-c5821d1fa9f5</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">Host</td>
+                                                        <td class="text-wrap">www.beta.boltseal.com</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">Accept-Encoding</td>
+                                                        <td class="text-wrap">gzip, deflate, br</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">Connection</td>
+                                                        <td class="text-wrap">keep-alive</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">Content-Length</td>
+                                                        <td class="text-wrap">1087</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                        <div class="col-sm-12 mb-3">
+                            <div class="card-deck">
+                            <div class="card border-info" style="width: 50rem;">
+                                <div class="card-body">
+                                    <h5 class="card-title text-uppercase text-white text-center bg-info">Request Body</h5>
+                                        <div class="dyn-height">
+                                            <pre><code id="copyReqText-1" class="prettyPrint">{
+            &quot;shippingbills&quot;: [
+                {
+                    &quot;billNumber&quot;: &quot;3456785&quot;,
+                    &quot;billDate&quot;: &quot;06&quot;,
+                    &quot;billMonth&quot;: &quot;03&quot;,
+                    &quot;billYear&quot;: 2024,
+                    &quot;daysThirty&quot;: false,
+                    &quot;eWaybillShipping&quot;: [
+                        {
+                            &quot;eWaybillShipping&quot;: &quot;&quot;
+                        }
+                    ],
+                    &quot;verify&quot;: 0
+                }
+            ],
+            &quot;destinationPort&quot;: &quot;642d1d0df0ca495ce46e6ac8&quot;,
+            &quot;finalDestinationPort&quot;: &quot;642d1d0df0ca495ce46e6ac8&quot;,
+            &quot;SealData&quot;: [
+                {
+                    &quot;sealNumber&quot;: &quot;BOLT02328245&quot;,
+                    &quot;sealingDate&quot;: &quot;04&quot;,
+                    &quot;sealingMonth&quot;: &quot;03&quot;,
+                    &quot;daysThirty&quot;: false,
+                    &quot;sealingYear&quot;: 2024,
+                    &quot;truckNo&quot;: &quot;3456786543567&quot;,
+                    &quot;containerNo&quot;: &quot;jhhy3456787&quot;,
+                    &quot;sealingTime&quot;: &quot;03:09&quot;,
+                    &quot;eWaybill&quot;: [
+                        {
+                            &quot;eWaybill&quot;: &quot;NOT_REQUIRED&quot;
+                        }
+                    ],
+                    &quot;format&quot;: &quot;AM&quot;,
+                    &quot;hour&quot;: &quot;03&quot;,
+                    &quot;min&quot;: &quot;09&quot;,
+                    &quot;containerVerified&quot;: 0
+                }
+            ]
+        }</code></pre>
+                                        </div>
+                                        <div class="card-footer">
+                                            <button class="btn btn-outline-secondary btn-sm copyButton" type="button" data-clipboard-action="copy" data-clipboard-target="#copyReqText-1">Copy to Clipboard</button>
+                                        </div>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                        <div class="row">
+                        <div class="col-sm-12 mb-3">
+                            <div class="card-deck">
+                            <div class="card border-info" style="width: 50rem;">
+                                <div class="card-body">
+                                    <h5 class="card-title text-uppercase text-white text-center bg-info">Response Headers</h5>
+                                    <div class="table-responsive">
+                                        <table class="table table-bordered">
+                                        <thead class="thead-light text-center"><tr><th>Header Name</th><th>Header Value</th></tr></thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td class="text-nowrap">Server</td>
+                                                    <td class="text-wrap">nginx/1.14.0 (Ubuntu)</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">Date</td>
+                                                    <td class="text-wrap">Thu, 28 Mar 2024 11:19:29 GMT</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">Content-Type</td>
+                                                    <td class="text-wrap">application/json; charset&#x3D;utf-8</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">Content-Length</td>
+                                                    <td class="text-wrap">16</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">Connection</td>
+                                                    <td class="text-wrap">keep-alive</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">X-Powered-By</td>
+                                                    <td class="text-wrap">Express</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">Access-Control-Allow-Origin</td>
+                                                    <td class="text-wrap">*</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">ETag</td>
+                                                    <td class="text-wrap">W/&quot;10-oV4hJxRVSENxc/wX8+mA4/Pe4tA&quot;</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                        <div class="row">
+                        <div class="col-sm-12 mb-3">
+                            <div class="card-deck">
+                            <div class="card border-info" style="width: 50rem;">
+                                <div class="card-body">
+                                    <h5 class="card-title text-uppercase text-white text-center bg-info">Response Body</h5>
+                                        <div class="dyn-height">
+                                                <pre><code id="copyText-dadaeb63-c3b8-43ef-8fd0-ecb027c9c929" class="prettyPrint">{&quot;success&quot;:true}</code></pre>
+                                        </div>
+                                        <div class="card-footer">
+                                            <button class="btn btn-outline-secondary btn-sm copyButton" type="button" data-clipboard-action="copy" data-clipboard-target="#copyText-dadaeb63-c3b8-43ef-8fd0-ecb027c9c929">Copy to Clipboard</button>
+                                        </div>
+                                </div>
+                            </div>
+                            </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="card border-info">
+                                <div class="card-body">
+                                <h5 class="card-title text-uppercase text-white text-center bg-info">Test Information</h5>
+                                    <h5 class="alert alert-success text-uppercase text-center">No Tests for this request</h5>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+                </div>
+            </div>
+            </div>
+            <div id="folder-ea71b906-add5-4d69-b43b-22febd7057c5" class="card-deck iteration-0">
+            <div class="row iteration-0">
+                <div class="col-sm-12 mb-3 iteration-0">
+                <div class="card iteration-0">
+                    <div class="card-header  bg-success iteration-0">
+                        <a data-toggle="collapse" href="#" data-target="#collapse-ea71b906-add5-4d69-b43b-22febd7057c5" aria-expanded="false" aria-controls="collapse" id="requests-ea71b906-add5-4d69-b43b-22febd7057c5" class="collapsed text-white z-block">
+                    Iteration: 1 - http://www.beta.boltseal.com/sealservices/confirmSeal <i class="float-lg-right fa fa-chevron-down" style="padding-top: 5px;"></i>
+                </a>
+                    </div>
+                    <div id="collapse-ea71b906-add5-4d69-b43b-22febd7057c5" class="collapse" aria-labelledby="requests-ea71b906-add5-4d69-b43b-22febd7057c5">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-sm-12 mb-3">
+                                <div class="card-deck">
+                                <div class="card border-info" style="width: 50rem;">
+                                    <div class="card-body">
+                                    <h5 class="card-title text-uppercase text-white text-center bg-info">Request Information</h5>
+                                    <span><i class="fas fa-info-circle"></i></span><strong> Request Method:</strong> <span class="badge-outline-success badge badge-success"> POST</span><br>
+                                    <span><i class="fas fa-info-circle"></i></span><strong> Request URL:</strong> <a href="http://confirmseal/" target="_blank">http://confirmseal/</a><br>
+                                    </div>
+                                </div>
+                                <div class="card border-info" style="width: 50rem;">
+                                    <div class="card-body">
+                                    <h5 class="card-title text-uppercase text-white text-center bg-info">Response Information</h5>
+                                    <span><i class="fas fa-info-circle"></i></span><strong> Response Code:</strong> <span class="float-right badge-outline badge badge-success">  - </span><br>
+                                    <span><i class="fas fa-stopwatch"></i></span><strong> Mean time per request:</strong> <span class="float-right badge-outline badge badge-success"> 0ms</span><br>
+                                    <span><i class="fas fa-database"></i></span><strong> Mean size per request:</strong> <span class="float-right badge-outline badge badge-success"> 0B</span><br>
+                                    <hr>
+                                    <h5 class="card-title text-uppercase text-white text-center bg-info">Test Pass Percentage</h5>
+                                    <div>
+                                        <div class="progress" style="height: 40px;">
+                                            <div class="progress-bar bg-success" style="width: 100%" role="progressbar">
+                                            <h5 class="text-uppercase text-white text-center" style="padding-top:5px;"><strong>No Tests for this request</strong></h5>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    </div>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12 mb-3">
+                                <div class="card-deck">
+                                <div class="card border-info" style="width: 50rem;">
+                                    <div class="card-body">
+                                        <h5 class="card-title text-uppercase text-white text-center bg-info">Request Headers</h5>
+                                        <div class="table-responsive">
+                                            <table class="table table-bordered">
+                                            <thead class="thead-light text-center"><tr><th>Header Name</th><th>Header Value</th></tr></thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <td class="text-nowrap">Authorization</td>
+                                                        <td class="text-wrap">eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjcmVhdGVkRGF0ZSI6IjE3MTA5NTQ2MTYxMzItNjFmYTU1ZGMzNjBkNGQxOGNiNjFiZDM3IiwiaWVjQ29kZSI6IjgyODUzMDIwNzIiLCJ1c2VySWQiOiI2MWZhNTVkYzM2MGQ0ZDE4Y2I2MWJkMzciLCJ1c2VyVHlwZSI6Nywibm9lIjoiQ2hha3JhZGhhciBOT0UiLCJpc0J1eWluZyI6dHJ1ZSwicmVmZXJyZWRCeSI6IkRJUkVDVCIsInBlcm1pc3Npb25zIjpbInNlYWxzdGF0dXMiLCJhZmZpeCIsInVzZXJtYW5hZ2VtZW50IiwidHJpcGxvZ3MiLCJub3RpZmljYXRpb24iLCJzYXZlZCJdLCJpc0FsbFNlZW4iOmZhbHNlLCJpc19jZnNfdXNlciI6dHJ1ZSwiaXNfc2VsZnNlYWxfdXNlciI6dHJ1ZSwiaWF0IjoxNzEwOTU0NjE2LCJleHAiOjE3MTE4MTg2MTZ9.TuER3lldFGhs8bloU20OsQ7I3-1fo5rGt5PBwAaojRU</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">Content-Type</td>
+                                                        <td class="text-wrap">application/json</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">User-Agent</td>
+                                                        <td class="text-wrap">PostmanRuntime/7.37.1</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">Accept</td>
+                                                        <td class="text-wrap">*/*</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">Cache-Control</td>
+                                                        <td class="text-wrap">no-cache</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">Postman-Token</td>
+                                                        <td class="text-wrap">a85164ef-2038-42ce-88fd-71f5159fd2a0</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">Host</td>
+                                                        <td class="text-wrap">confirmseal</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">Accept-Encoding</td>
+                                                        <td class="text-wrap">gzip, deflate, br</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">Connection</td>
+                                                        <td class="text-wrap">keep-alive</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                        <div class="col-sm-12 mb-3">
+                            <div class="card-deck">
+                            <div class="card border-info" style="width: 50rem;">
+                                <div class="card-body">
+                                    <h5 class="card-title text-uppercase text-white text-center bg-info">Request Body</h5>
+                                        <div class="dyn-height">
+                                            <pre><code id="copyReqText-2" class="prettyPrint">{
+            &quot;shippingbills&quot;: [
+                {
+                    &quot;billNumber&quot;: &quot;3456785&quot;,
+                    &quot;billDate&quot;: &quot;06&quot;,
+                    &quot;billMonth&quot;: &quot;03&quot;,
+                    &quot;billYear&quot;: 2024,
+                    &quot;daysThirty&quot;: false,
+                    &quot;eWaybillShipping&quot;: [
+                        {
+                            &quot;eWaybillShipping&quot;: &quot;&quot;
+                        }
+                    ],
+                    &quot;verify&quot;: 0,
+                    &quot;ewaybills&quot;: [
+                        &quot;&quot;
+                    ]
+                }
+            ],
+            &quot;destinationPort&quot;: &quot;642d1d0df0ca495ce46e6ac8&quot;,
+            &quot;finalDestinationPort&quot;: &quot;642d1d0df0ca495ce46e6ac8&quot;,
+            &quot;SealData&quot;: [
+                {
+                    &quot;sealNumber&quot;: &quot;BOLT02328245&quot;,
+                    &quot;sealingDate&quot;: &quot;04&quot;,
+                    &quot;sealingMonth&quot;: &quot;03&quot;,
+                    &quot;daysThirty&quot;: false,
+                    &quot;sealingYear&quot;: 2024,
+                    &quot;truckNo&quot;: &quot;3456786543567&quot;,
+                    &quot;containerNo&quot;: &quot;jhhy3456787&quot;,
+                    &quot;sealingTime&quot;: &quot;03:09&quot;,
+                    &quot;eWaybill&quot;: [
+                        {
+                            &quot;eWaybill&quot;: &quot;NOT_REQUIRED&quot;
+                        }
+                    ],
+                    &quot;format&quot;: &quot;AM&quot;,
+                    &quot;hour&quot;: &quot;03&quot;,
+                    &quot;min&quot;: &quot;09&quot;,
+                    &quot;containerVerified&quot;: 0,
+                    &quot;ewaybills&quot;: [
+                        &quot;NOT_REQUIRED&quot;
+                    ],
+                    &quot;transportation_mode&quot;: &quot;truck&quot;
+                }
+            ],
+            &quot;cfsStuffingPlace&quot;: &quot;&quot;,
+            &quot;portCustomclearance&quot;: &quot;&quot;
+        }</code></pre>
+                                        </div>
+                                        <div class="card-footer">
+                                            <button class="btn btn-outline-secondary btn-sm copyButton" type="button" data-clipboard-action="copy" data-clipboard-target="#copyReqText-2">Copy to Clipboard</button>
+                                        </div>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                        <div class="row">
+                        <div class="col-sm-12 mb-3">
+                            <div class="card-deck">
+                            <div class="card border-info" style="width: 50rem;">
+                                <div class="card-body">
+                                    <h5 class="card-title text-uppercase text-white text-center bg-info">Response Headers</h5>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                        <div class="row">
+                        <div class="col-sm-12 mb-3">
+                            <div class="card-deck">
+                            <div class="card border-info" style="width: 50rem;">
+                                <div class="card-body">
+                                    <h5 class="card-title text-uppercase text-white text-center bg-info">Response Body</h5>
+                                    <h5 class="alert alert-success text-uppercase text-center">No Response Body for this request</h5>
+                                </div>
+                            </div>
+                            </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="card border-info">
+                                <div class="card-body">
+                                <h5 class="card-title text-uppercase text-white text-center bg-info">Test Information</h5>
+                                    <h5 class="alert alert-success text-uppercase text-center">No Tests for this request</h5>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+                </div>
+            </div>
+            </div>
+            <div id="folder-7ea8f787-11f0-4a61-91f1-df92d9605fce" class="card-deck iteration-0">
+            <div class="row iteration-0">
+                <div class="col-sm-12 mb-3 iteration-0">
+                <div class="card iteration-0">
+                    <div class="card-header  bg-success iteration-0">
+                        <a data-toggle="collapse" href="#" data-target="#collapse-7ea8f787-11f0-4a61-91f1-df92d9605fce" aria-expanded="false" aria-controls="collapse" id="requests-7ea8f787-11f0-4a61-91f1-df92d9605fce" class="collapsed text-white z-block">
+                    Iteration: 1 - exporter/custom login <i class="float-lg-right fa fa-chevron-down" style="padding-top: 5px;"></i>
+                </a>
+                    </div>
+                    <div id="collapse-7ea8f787-11f0-4a61-91f1-df92d9605fce" class="collapse" aria-labelledby="requests-7ea8f787-11f0-4a61-91f1-df92d9605fce">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-sm-12 mb-3">
+                                <div class="card-deck">
+                                <div class="card border-info" style="width: 50rem;">
+                                    <div class="card-body">
+                                    <h5 class="card-title text-uppercase text-white text-center bg-info">Request Information</h5>
+                                    <span><i class="fas fa-info-circle"></i></span><strong> Request Method:</strong> <span class="badge-outline-success badge badge-success"> POST</span><br>
+                                    <span><i class="fas fa-info-circle"></i></span><strong> Request URL:</strong> <a href="http://www.beta.boltseal.com/authentication/login" target="_blank">http://www.beta.boltseal.com/authentication/login</a><br>
+                                    </div>
+                                </div>
+                                <div class="card border-info" style="width: 50rem;">
+                                    <div class="card-body">
+                                    <h5 class="card-title text-uppercase text-white text-center bg-info">Response Information</h5>
+                                    <span><i class="fas fa-info-circle"></i></span><strong> Response Code:</strong> <span class="float-right badge-outline badge badge-success"> 200 - OK</span><br>
+                                    <span><i class="fas fa-stopwatch"></i></span><strong> Mean time per request:</strong> <span class="float-right badge-outline badge badge-success"> 453ms</span><br>
+                                    <span><i class="fas fa-database"></i></span><strong> Mean size per request:</strong> <span class="float-right badge-outline badge badge-success"> 1.55KB</span><br>
+                                    <hr>
+                                    <h5 class="card-title text-uppercase text-white text-center bg-info">Test Pass Percentage</h5>
+                                    <div>
+                                        <div class="progress" style="height: 40px;">
+                                            <div class="progress-bar bg-success" style="width: 100%" role="progressbar">
+                                            <h5 class="text-uppercase text-white text-center" style="padding-top:5px;"><strong>No Tests for this request</strong></h5>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    </div>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12 mb-3">
+                                <div class="card-deck">
+                                <div class="card border-info" style="width: 50rem;">
+                                    <div class="card-body">
+                                        <h5 class="card-title text-uppercase text-white text-center bg-info">Request Headers</h5>
+                                        <div class="table-responsive">
+                                            <table class="table table-bordered">
+                                            <thead class="thead-light text-center"><tr><th>Header Name</th><th>Header Value</th></tr></thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <td class="text-nowrap">Authorization</td>
+                                                        <td class="text-wrap"></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">Content-Type</td>
+                                                        <td class="text-wrap">application/json</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">User-Agent</td>
+                                                        <td class="text-wrap">PostmanRuntime/7.37.1</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">Accept</td>
+                                                        <td class="text-wrap">*/*</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">Cache-Control</td>
+                                                        <td class="text-wrap">no-cache</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">Postman-Token</td>
+                                                        <td class="text-wrap">643ac3a9-0de3-459f-a1a1-63fcf5bd0407</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">Host</td>
+                                                        <td class="text-wrap">www.beta.boltseal.com</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">Accept-Encoding</td>
+                                                        <td class="text-wrap">gzip, deflate, br</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">Connection</td>
+                                                        <td class="text-wrap">keep-alive</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">Content-Length</td>
+                                                        <td class="text-wrap">72</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                        <div class="col-sm-12 mb-3">
+                            <div class="card-deck">
+                            <div class="card border-info" style="width: 50rem;">
+                                <div class="card-body">
+                                    <h5 class="card-title text-uppercase text-white text-center bg-info">Request Body</h5>
+                                        <div class="dyn-height">
+                                            <pre><code id="copyReqText-3" class="prettyPrint">{
+          &quot;iec&quot;: &quot;8285302072&quot;,
+          &quot;password&quot;: &quot;12345678&quot;,
+          &quot;userType&quot;: 7
+        }</code></pre>
+                                        </div>
+                                        <div class="card-footer">
+                                            <button class="btn btn-outline-secondary btn-sm copyButton" type="button" data-clipboard-action="copy" data-clipboard-target="#copyReqText-3">Copy to Clipboard</button>
+                                        </div>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                        <div class="row">
+                        <div class="col-sm-12 mb-3">
+                            <div class="card-deck">
+                            <div class="card border-info" style="width: 50rem;">
+                                <div class="card-body">
+                                    <h5 class="card-title text-uppercase text-white text-center bg-info">Response Headers</h5>
+                                    <div class="table-responsive">
+                                        <table class="table table-bordered">
+                                        <thead class="thead-light text-center"><tr><th>Header Name</th><th>Header Value</th></tr></thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td class="text-nowrap">Server</td>
+                                                    <td class="text-wrap">nginx/1.14.0 (Ubuntu)</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">Date</td>
+                                                    <td class="text-wrap">Thu, 28 Mar 2024 11:19:32 GMT</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">Content-Type</td>
+                                                    <td class="text-wrap">application/json; charset&#x3D;utf-8</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">Content-Length</td>
+                                                    <td class="text-wrap">1583</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">Connection</td>
+                                                    <td class="text-wrap">keep-alive</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">X-Powered-By</td>
+                                                    <td class="text-wrap">Express</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">Access-Control-Allow-Origin</td>
+                                                    <td class="text-wrap">*</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">ETag</td>
+                                                    <td class="text-wrap">W/&quot;62f-lHicXzdH0wf1TZCrrtiNM8Eptuk&quot;</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                        <div class="row">
+                        <div class="col-sm-12 mb-3">
+                            <div class="card-deck">
+                            <div class="card border-info" style="width: 50rem;">
+                                <div class="card-body">
+                                    <h5 class="card-title text-uppercase text-white text-center bg-info">Response Body</h5>
+                                        <div class="dyn-height">
+                                                <pre><code id="copyText-e5e2c019-8e0e-4f2d-8590-41a07ff7efd0" class="prettyPrint">{&quot;success&quot;:true,&quot;message&quot;:&quot;success&quot;,&quot;token&quot;:&quot;eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjcmVhdGVkRGF0ZSI6IjE3MTE2MjQ3NzI1NzgtNjFmYTU1ZGMzNjBkNGQxOGNiNjFiZDM3IiwiaWVjQ29kZSI6IjgyODUzMDIwNzIiLCJ1c2VySWQiOiI2MWZhNTVkYzM2MGQ0ZDE4Y2I2MWJkMzciLCJ1c2VyVHlwZSI6Nywibm9lIjoiQ2hha3JhZGhhciBOT0UiLCJpc0J1eWluZyI6dHJ1ZSwicmVmZXJyZWRCeSI6IkRJUkVDVCIsInBlcm1pc3Npb25zIjpbInNlYWxzdGF0dXMiLCJhZmZpeCIsInVzZXJtYW5hZ2VtZW50IiwidHJpcGxvZ3MiLCJub3RpZmljYXRpb24iLCJzYXZlZCJdLCJpc0FsbFNlZW4iOmZhbHNlLCJpc19jZnNfdXNlciI6dHJ1ZSwiaXNfc2VsZnNlYWxfdXNlciI6dHJ1ZSwiaWF0IjoxNzExNjI0NzcyLCJleHAiOjE3MTI0ODg3NzJ9.CiV_01Am1pGFZphEGdO7SpL9IBofUQDS6akD1-FZkiU&quot;,&quot;jwtStr&quot;:&quot;eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbmNTdHIiOiJQcGIrQ0d6aitCenAyb005d1d1L0RDZGR2QjRXb2FzQkNtQ0I2aXp1YWU5allJRk5DaFRDb0M4dGxBYkFHMFYxcDAzUnpRcnZUL0RBNFVLUkMyR1RuWXhLSS9DT1UrQ1JRNEZxVkJabFdMcHVXaWdadGxjTUQrUUxGRjFlOWY1cTRVbkFvUENRQnIvS1AxUzIvRm82aXp0RUJIKzE1aFB0SnhmZkpIVFY2cUdhQWRCQ3BPellNWnlITmVrSElMdDZoOHY4MGpqaC9DeHlScnQ1TGJGSTU4K3RKeE5kTE5pYXpxMEh4dWc4WjZDQUJIaEswK2FCOThqVkI0T0NJY2JYQ0dySFY5alA5eE0xV2xuVklYTUFIeGxPSTFFNTR3Slk5T21ENFpMV3RjUEJUWlN2SzU3dXhRaUl1VnFDUGdPdnVGWVkwTW9jOGpBYXY2Tmd3azVzQ3BudUR3L25tNHNpZTZMeVF2cEovVldxZG4wVEkvSVQvVzlCODBQeE1SaUEiLCJpYXQiOjE3MTE2MjQ3NzIsImV4cCI6MTcxMjQ4ODc3Mn0.ggwLno-Vql2JoIzYzxSkrlFDjqVZwe_xCM1dDxVvUdk&quot;,&quot;user&quot;:{&quot;iecCode&quot;:&quot;8285302072&quot;,&quot;userId&quot;:&quot;61fa55dc360d4d18cb61bd37&quot;,&quot;userType&quot;:7,&quot;noe&quot;:&quot;Chakradhar NOE&quot;,&quot;isBuying&quot;:true,&quot;referredBy&quot;:&quot;DIRECT&quot;,&quot;permissions&quot;:[&quot;sealstatus&quot;,&quot;affix&quot;,&quot;usermanagement&quot;,&quot;triplogs&quot;,&quot;notification&quot;,&quot;saved&quot;],&quot;isAllSeen&quot;:false,&quot;is_cfs_user&quot;:true,&quot;is_selfseal_user&quot;:true}}</code></pre>
+                                        </div>
+                                        <div class="card-footer">
+                                            <button class="btn btn-outline-secondary btn-sm copyButton" type="button" data-clipboard-action="copy" data-clipboard-target="#copyText-e5e2c019-8e0e-4f2d-8590-41a07ff7efd0">Copy to Clipboard</button>
+                                        </div>
+                                </div>
+                            </div>
+                            </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="card border-info">
+                                <div class="card-body">
+                                <h5 class="card-title text-uppercase text-white text-center bg-info">Test Information</h5>
+                                    <h5 class="alert alert-success text-uppercase text-center">No Tests for this request</h5>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+                </div>
+            </div>
+            </div>
+            <div id="folder-eb95f690-a03e-47b8-b949-b41ba243c299" class="card-deck iteration-0">
+            <div class="row iteration-0">
+                <div class="col-sm-12 mb-3 iteration-0">
+                <div class="card iteration-0">
+                    <div class="card-header  bg-success iteration-0">
+                        <a data-toggle="collapse" href="#" data-target="#collapse-eb95f690-a03e-47b8-b949-b41ba243c299" aria-expanded="false" aria-controls="collapse" id="requests-eb95f690-a03e-47b8-b949-b41ba243c299" class="collapsed text-white z-block">
+                    Iteration: 1 - cancelorder <i class="float-lg-right fa fa-chevron-down" style="padding-top: 5px;"></i>
+                </a>
+                    </div>
+                    <div id="collapse-eb95f690-a03e-47b8-b949-b41ba243c299" class="collapse" aria-labelledby="requests-eb95f690-a03e-47b8-b949-b41ba243c299">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-sm-12 mb-3">
+                                <div class="card-deck">
+                                <div class="card border-info" style="width: 50rem;">
+                                    <div class="card-body">
+                                    <h5 class="card-title text-uppercase text-white text-center bg-info">Request Information</h5>
+                                    <span><i class="fas fa-info-circle"></i></span><strong> Request Method:</strong> <span class="badge-outline-success badge badge-success"> POST</span><br>
+                                    <span><i class="fas fa-info-circle"></i></span><strong> Request URL:</strong> <a href="https://boltseal.com/ms-service/db/api/cancelorder" target="_blank">https://boltseal.com/ms-service/db/api/cancelorder</a><br>
+                                    </div>
+                                </div>
+                                <div class="card border-info" style="width: 50rem;">
+                                    <div class="card-body">
+                                    <h5 class="card-title text-uppercase text-white text-center bg-info">Response Information</h5>
+                                    <span><i class="fas fa-info-circle"></i></span><strong> Response Code:</strong> <span class="float-right badge-outline badge badge-success"> 200 - OK</span><br>
+                                    <span><i class="fas fa-stopwatch"></i></span><strong> Mean time per request:</strong> <span class="float-right badge-outline badge badge-success"> 254ms</span><br>
+                                    <span><i class="fas fa-database"></i></span><strong> Mean size per request:</strong> <span class="float-right badge-outline badge badge-success"> 86B</span><br>
+                                    <hr>
+                                    <h5 class="card-title text-uppercase text-white text-center bg-info">Test Pass Percentage</h5>
+                                    <div>
+                                        <div class="progress" style="height: 40px;">
+                                            <div class="progress-bar bg-success" style="width: 100%" role="progressbar">
+                                            <h5 class="text-uppercase text-white text-center" style="padding-top:5px;"><strong>No Tests for this request</strong></h5>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    </div>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12 mb-3">
+                                <div class="card-deck">
+                                <div class="card border-info" style="width: 50rem;">
+                                    <div class="card-body">
+                                        <h5 class="card-title text-uppercase text-white text-center bg-info">Request Headers</h5>
+                                        <div class="table-responsive">
+                                            <table class="table table-bordered">
+                                            <thead class="thead-light text-center"><tr><th>Header Name</th><th>Header Value</th></tr></thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <td class="text-nowrap">Authorization</td>
+                                                        <td class="text-wrap">eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyVHlwZSI6MTMsInVzZXJOYW1lIjoiS2Ftc2luIiwidXNlcklkIjoiNWNlNGY3MDgzMWE0OWQyZDUzOTA1ZmVhIiwiY3JlYXRlZERhdGUiOiIyMDIyLTEyLTE5VDEyOjM3OjMyLjQ1OFo1Y2U0ZjcwODMxYTQ5ZDJkNTM5MDVmZWEiLCJzdGF0ZUNvZGUiOiJETCIsInN0YXRlIjoiRGVsaGkiLCJwZXJtaXNzaW9ucyI6W3siZmVhdHVyZXMiOnsibWluaUFkbWluIjp7InJlZ2lzdGFydGlvbkluZm8iOnRydWUsImFkZHJlc3NCb29rIjp0cnVlLCJvcmRlckRldGFpbHMiOnRydWUsImNvdXJpZXJUb3NlbGYiOnRydWUsInJlYWRlckRhc2hib2FyZCI6dHJ1ZSwicmVhZGVyRWRpdCI6dHJ1ZSwiY291cmllclBhbmVsIjp0cnVlLCJzZWxmVG9jb3VyaWVyIjp0cnVlLCJzZWFsVHJhbnNmZXIiOnRydWUsImRpc2NvdW50U2V0dGluZyI6dHJ1ZSwibm90aWZpY2F0aW9uIjp0cnVlLCJhbmFseXNpcyI6dHJ1ZSwicmF0ZUFwcHJvdmFsIjp0cnVlLCJjdXN0b21PZmZpY2VyIjp0cnVlLCJkb2N1bWVudFVwbG9hZCI6dHJ1ZX0sImVkaXRQSSI6dHJ1ZSwiZWRpdFRJIjp0cnVlLCJhc3NpZ25TZWFsVHlwZSI6dHJ1ZX19XSwiaWF0IjoxNjcxNDUzNDUyLCJleHAiOjE2NzIzMTc0NTJ9.vDFMIC1YmB3tJ-AWQWxAPd8irriCuxavc8puqIz1bTM</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">Content-Type</td>
+                                                        <td class="text-wrap">application/json</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">User-Agent</td>
+                                                        <td class="text-wrap">PostmanRuntime/7.37.1</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">Accept</td>
+                                                        <td class="text-wrap">*/*</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">Cache-Control</td>
+                                                        <td class="text-wrap">no-cache</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">Postman-Token</td>
+                                                        <td class="text-wrap">8f8be235-1989-4f9b-805e-364804005a21</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">Host</td>
+                                                        <td class="text-wrap">boltseal.com</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">Accept-Encoding</td>
+                                                        <td class="text-wrap">gzip, deflate, br</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">Connection</td>
+                                                        <td class="text-wrap">keep-alive</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">Content-Length</td>
+                                                        <td class="text-wrap">42</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                        <div class="col-sm-12 mb-3">
+                            <div class="card-deck">
+                            <div class="card border-info" style="width: 50rem;">
+                                <div class="card-body">
+                                    <h5 class="card-title text-uppercase text-white text-center bg-info">Request Body</h5>
+                                        <div class="dyn-height">
+                                            <pre><code id="copyReqText-4" class="prettyPrint">{
+            &quot;orderID&quot;: &quot;122022-19BT-1023329&quot;
+        }</code></pre>
+                                        </div>
+                                        <div class="card-footer">
+                                            <button class="btn btn-outline-secondary btn-sm copyButton" type="button" data-clipboard-action="copy" data-clipboard-target="#copyReqText-4">Copy to Clipboard</button>
+                                        </div>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                        <div class="row">
+                        <div class="col-sm-12 mb-3">
+                            <div class="card-deck">
+                            <div class="card border-info" style="width: 50rem;">
+                                <div class="card-body">
+                                    <h5 class="card-title text-uppercase text-white text-center bg-info">Response Headers</h5>
+                                    <div class="table-responsive">
+                                        <table class="table table-bordered">
+                                        <thead class="thead-light text-center"><tr><th>Header Name</th><th>Header Value</th></tr></thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td class="text-nowrap">Server</td>
+                                                    <td class="text-wrap">nginx/1.10.3 (Ubuntu)</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">Date</td>
+                                                    <td class="text-wrap">Thu, 28 Mar 2024 11:19:32 GMT</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">Content-Type</td>
+                                                    <td class="text-wrap">application/json; charset&#x3D;utf-8</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">Content-Length</td>
+                                                    <td class="text-wrap">86</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">Connection</td>
+                                                    <td class="text-wrap">keep-alive</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">X-Powered-By</td>
+                                                    <td class="text-wrap">Express</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">Access-Control-Allow-Origin</td>
+                                                    <td class="text-wrap">*</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">ETag</td>
+                                                    <td class="text-wrap">W/&quot;56-tf74xZvFAqiAD+V4Sx1AV5tV+a4&quot;</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                        <div class="row">
+                        <div class="col-sm-12 mb-3">
+                            <div class="card-deck">
+                            <div class="card border-info" style="width: 50rem;">
+                                <div class="card-body">
+                                    <h5 class="card-title text-uppercase text-white text-center bg-info">Response Body</h5>
+                                        <div class="dyn-height">
+                                                <pre><code id="copyText-afb0f7b4-fa11-4243-9510-5cb6e7dbb500" class="prettyPrint">{&quot;success&quot;:false,&quot;error&quot;:true,&quot;message&quot;:&quot;Session Expired please logout &amp; login again&quot;}</code></pre>
+                                        </div>
+                                        <div class="card-footer">
+                                            <button class="btn btn-outline-secondary btn-sm copyButton" type="button" data-clipboard-action="copy" data-clipboard-target="#copyText-afb0f7b4-fa11-4243-9510-5cb6e7dbb500">Copy to Clipboard</button>
+                                        </div>
+                                </div>
+                            </div>
+                            </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="card border-info">
+                                <div class="card-body">
+                                <h5 class="card-title text-uppercase text-white text-center bg-info">Test Information</h5>
+                                    <h5 class="alert alert-success text-uppercase text-center">No Tests for this request</h5>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+                </div>
+            </div>
+            </div>
+            <div id="folder-5278f68c-7d9e-4e7b-8b70-eba31865fe3d" class="card-deck iteration-0">
+            <div class="row iteration-0">
+                <div class="col-sm-12 mb-3 iteration-0">
+                <div class="card iteration-0">
+                    <div class="card-header  bg-success iteration-0">
+                        <a data-toggle="collapse" href="#" data-target="#collapse-5278f68c-7d9e-4e7b-8b70-eba31865fe3d" aria-expanded="false" aria-controls="collapse" id="requests-5278f68c-7d9e-4e7b-8b70-eba31865fe3d" class="collapsed text-white z-block">
+                    Iteration: 1 - Admin-Login <i class="float-lg-right fa fa-chevron-down" style="padding-top: 5px;"></i>
+                </a>
+                    </div>
+                    <div id="collapse-5278f68c-7d9e-4e7b-8b70-eba31865fe3d" class="collapse" aria-labelledby="requests-5278f68c-7d9e-4e7b-8b70-eba31865fe3d">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-sm-12 mb-3">
+                                <div class="card-deck">
+                                <div class="card border-info" style="width: 50rem;">
+                                    <div class="card-body">
+                                    <h5 class="card-title text-uppercase text-white text-center bg-info">Request Information</h5>
+                                    <span><i class="fas fa-info-circle"></i></span><strong> Request Method:</strong> <span class="badge-outline-success badge badge-success"> POST</span><br>
+                                    <span><i class="fas fa-info-circle"></i></span><strong> Request URL:</strong> <a href="http://www.beta.boltseal.com/adminauth/loginadmin" target="_blank">http://www.beta.boltseal.com/adminauth/loginadmin</a><br>
+                                    </div>
+                                </div>
+                                <div class="card border-info" style="width: 50rem;">
+                                    <div class="card-body">
+                                    <h5 class="card-title text-uppercase text-white text-center bg-info">Response Information</h5>
+                                    <span><i class="fas fa-info-circle"></i></span><strong> Response Code:</strong> <span class="float-right badge-outline badge badge-success"> 200 - OK</span><br>
+                                    <span><i class="fas fa-stopwatch"></i></span><strong> Mean time per request:</strong> <span class="float-right badge-outline badge badge-success"> 427ms</span><br>
+                                    <span><i class="fas fa-database"></i></span><strong> Mean size per request:</strong> <span class="float-right badge-outline badge badge-success"> 2.96KB</span><br>
+                                    <hr>
+                                    <h5 class="card-title text-uppercase text-white text-center bg-info">Test Pass Percentage</h5>
+                                    <div>
+                                        <div class="progress" style="height: 40px;">
+                                            <div class="progress-bar bg-success" style="width: 100%" role="progressbar">
+                                            <h5 class="text-uppercase text-white text-center" style="padding-top:5px;"><strong>No Tests for this request</strong></h5>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    </div>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12 mb-3">
+                                <div class="card-deck">
+                                <div class="card border-info" style="width: 50rem;">
+                                    <div class="card-body">
+                                        <h5 class="card-title text-uppercase text-white text-center bg-info">Request Headers</h5>
+                                        <div class="table-responsive">
+                                            <table class="table table-bordered">
+                                            <thead class="thead-light text-center"><tr><th>Header Name</th><th>Header Value</th></tr></thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <td class="text-nowrap">Authorization</td>
+                                                        <td class="text-wrap">eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjcmVhdGVkRGF0ZSI6IjE3MTA5NTkwNDk5OTItNWVlY2IyNjk1MzNlMjdlNGE4M2I2Y2RhIiwidXNlclR5cGUiOjEzLCJ1c2VySWQiOiI1ZWVjYjI2OTUzM2UyN2U0YTgzYjZjZGEiLCJ1c2VyTmFtZSI6IlN1ZGhpc2ggMSIsIm5hbWUiOiJTdWRoaXNoIDEiLCJlbWFpbCI6InNhbGVzQGJvbHRzZWFsLmNvbSIsInN0YXRlQ29kZSI6IkRMIiwic3RhdGUiOiJEZWxoaSIsIm5vYyI6IiIsImV4cG9ydGVycyI6W10sInBlcm1pc3Npb25zIjpbeyJmZWF0dXJlcyI6eyJtaW5pQWRtaW4iOnsicmVnaXN0YXJ0aW9uSW5mbyI6dHJ1ZSwiYWRkcmVzc0Jvb2siOnRydWUsIm9yZGVyRGV0YWlscyI6dHJ1ZSwiY291cmllclRvc2VsZiI6dHJ1ZSwicmVhZGVyRGFzaGJvYXJkIjp0cnVlLCJyZWFkZXJFZGl0Ijp0cnVlLCJjb3VyaWVyUGFuZWwiOnRydWUsInNlbGZUb2NvdXJpZXIiOnRydWUsInNlYWxUcmFuc2ZlciI6dHJ1ZSwiZGlzY291bnRTZXR0aW5nIjp0cnVlLCJub3RpZmljYXRpb24iOnRydWUsImFuYWx5c2lzIjp0cnVlLCJyYXRlQXBwcm92YWwiOnRydWUsImN1c3RvbU9mZmljZXIiOnRydWUsImRvY3VtZW50VXBsb2FkIjp0cnVlLCJjaGFuZ2Vub2UiOnRydWUsImNhbmNlbG9yZGVyIjp0cnVlLCJpY2VnYXRlIjp0cnVlfSwiZWRpdFBJIjp0cnVlLCJlZGl0VEkiOnRydWUsImFzc2lnblNlYWxUeXBlIjp0cnVlfX1dLCJpYXQiOjE3MTA5NTkwNDksImV4cCI6MTcxMTgyMzA0OX0.GmI1DpB9bdFFRRdFHzRjl-V-8KgMKWbVvDm_b5OzYbU</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">Content-Type</td>
+                                                        <td class="text-wrap">application/json</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">User-Agent</td>
+                                                        <td class="text-wrap">PostmanRuntime/7.37.1</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">Accept</td>
+                                                        <td class="text-wrap">*/*</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">Cache-Control</td>
+                                                        <td class="text-wrap">no-cache</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">Postman-Token</td>
+                                                        <td class="text-wrap">f724f368-e79a-4085-9afb-78c7497d4ab7</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">Host</td>
+                                                        <td class="text-wrap">www.beta.boltseal.com</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">Accept-Encoding</td>
+                                                        <td class="text-wrap">gzip, deflate, br</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">Connection</td>
+                                                        <td class="text-wrap">keep-alive</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">Content-Length</td>
+                                                        <td class="text-wrap">92</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                        <div class="col-sm-12 mb-3">
+                            <div class="card-deck">
+                            <div class="card border-info" style="width: 50rem;">
+                                <div class="card-body">
+                                    <h5 class="card-title text-uppercase text-white text-center bg-info">Request Body</h5>
+                                        <div class="dyn-height">
+                                            <pre><code id="copyReqText-5" class="prettyPrint">{
+            &quot;mobileNumber&quot;: &quot;9898989898&quot;,
+            &quot;password&quot;: &quot;B@lt$eal2022&quot;,
+            &quot;userType&quot;: &quot;&quot;
+        }</code></pre>
+                                        </div>
+                                        <div class="card-footer">
+                                            <button class="btn btn-outline-secondary btn-sm copyButton" type="button" data-clipboard-action="copy" data-clipboard-target="#copyReqText-5">Copy to Clipboard</button>
+                                        </div>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                        <div class="row">
+                        <div class="col-sm-12 mb-3">
+                            <div class="card-deck">
+                            <div class="card border-info" style="width: 50rem;">
+                                <div class="card-body">
+                                    <h5 class="card-title text-uppercase text-white text-center bg-info">Response Headers</h5>
+                                    <div class="table-responsive">
+                                        <table class="table table-bordered">
+                                        <thead class="thead-light text-center"><tr><th>Header Name</th><th>Header Value</th></tr></thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td class="text-nowrap">Server</td>
+                                                    <td class="text-wrap">nginx/1.14.0 (Ubuntu)</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">Date</td>
+                                                    <td class="text-wrap">Thu, 28 Mar 2024 11:19:33 GMT</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">Content-Type</td>
+                                                    <td class="text-wrap">application/json; charset&#x3D;utf-8</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">Content-Length</td>
+                                                    <td class="text-wrap">3029</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">Connection</td>
+                                                    <td class="text-wrap">keep-alive</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">X-Powered-By</td>
+                                                    <td class="text-wrap">Express</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">Access-Control-Allow-Origin</td>
+                                                    <td class="text-wrap">*</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">ETag</td>
+                                                    <td class="text-wrap">W/&quot;bd5-GM8dkZyHxEfoeRJbpgrxPpvp93Q&quot;</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                        <div class="row">
+                        <div class="col-sm-12 mb-3">
+                            <div class="card-deck">
+                            <div class="card border-info" style="width: 50rem;">
+                                <div class="card-body">
+                                    <h5 class="card-title text-uppercase text-white text-center bg-info">Response Body</h5>
+                                        <div class="dyn-height">
+                                                <pre><code id="copyText-194952a8-1c76-407c-8b43-7131d3799b1f" class="prettyPrint">{&quot;success&quot;:true,&quot;message&quot;:&quot;success&quot;,&quot;token&quot;:&quot;eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjcmVhdGVkRGF0ZSI6IjE3MTE2MjQ3NzM0NDQtNWVlY2IyNjk1MzNlMjdlNGE4M2I2Y2RhIiwidXNlclR5cGUiOjEzLCJ1c2VySWQiOiI1ZWVjYjI2OTUzM2UyN2U0YTgzYjZjZGEiLCJ1c2VyTmFtZSI6IlN1ZGhpc2ggMSIsIm5hbWUiOiJTdWRoaXNoIDEiLCJlbWFpbCI6InNhbGVzQGJvbHRzZWFsLmNvbSIsInN0YXRlQ29kZSI6IkRMIiwic3RhdGUiOiJEZWxoaSIsIm5vYyI6IiIsImV4cG9ydGVycyI6W10sInBlcm1pc3Npb25zIjpbeyJmZWF0dXJlcyI6eyJtaW5pQWRtaW4iOnsicmVnaXN0YXJ0aW9uSW5mbyI6dHJ1ZSwiYWRkcmVzc0Jvb2siOnRydWUsIm9yZGVyRGV0YWlscyI6dHJ1ZSwiY291cmllclRvc2VsZiI6dHJ1ZSwicmVhZGVyRGFzaGJvYXJkIjp0cnVlLCJyZWFkZXJFZGl0Ijp0cnVlLCJjb3VyaWVyUGFuZWwiOnRydWUsInNlbGZUb2NvdXJpZXIiOnRydWUsInNlYWxUcmFuc2ZlciI6dHJ1ZSwiZGlzY291bnRTZXR0aW5nIjp0cnVlLCJub3RpZmljYXRpb24iOnRydWUsImFuYWx5c2lzIjp0cnVlLCJyYXRlQXBwcm92YWwiOnRydWUsImN1c3RvbU9mZmljZXIiOnRydWUsImRvY3VtZW50VXBsb2FkIjp0cnVlLCJjaGFuZ2Vub2UiOnRydWUsImNhbmNlbG9yZGVyIjp0cnVlLCJpY2VnYXRlIjp0cnVlfSwiZWRpdFBJIjp0cnVlLCJlZGl0VEkiOnRydWUsImFzc2lnblNlYWxUeXBlIjp0cnVlfX1dLCJpYXQiOjE3MTE2MjQ3NzMsImV4cCI6MTcxMjQ4ODc3M30.IiyczNQR9yo_W7dTIKSc-fIUoMp_A1GeRUhX0FxaQvw&quot;,&quot;jwtStr&quot;:&quot;eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbmNTdHIiOiJkWkdZRDNGazgvaXVkZ05ha0JVcktVUDlLaU5xTVdsZjdXZC9mZ2k4YmVBRTQvUXNmNFdhbFFuTGVPZURQR1lqWFBaMTVheVU5OThGM0Jjc0pvcG85SUliMkVqbUNBTXQyQUN0TkJsSlRrejhTY1E5ejI5L0trNlNsbU45UWZtaFhBUEIzdEg0Z2VrbWZ6VXdHYkVlOENmOG0yQ1dYZysxViswc2locEJTSWNYTFQ4ZTlkazdrZGlvSXlLZFZqOXkrM08wZ2RuY3dnS0Y2RE1FMUZ4OVNyZXVQMmZIRFNQV2VHVE9CekxSVTZDMFF5UnhQTVd4bEEvcFYrMzBITWZhTncySGFtL1BUK0xYTDRvMDlzTlJzeks3NEZIUDU1MXB3VVNudWt3RlFGbkg2ekRTa3NmZXFtSzRpdFpkRFlTSE94Q203YkNBa3hzWkk3MWtCb0ViUXNJaUh6eW00aUtISXVnbHo4WXcyRktENk1oVExJcGVZalY3eUdwSmlvWldES2JWbFJLQTFnZlNMalZBdGZKcG9kQ0FqWElyczRKVUU4c1lhZW5rSVdOOUxlbE92enI1OUFuUU0vWEtwSXFISFpuTnB2VDJJelNYVzkyQ1p2TlRPQ01jMGxDbU5tRXhhTEhYREZMMHdicGRnZnB1ekVpNWVLcVdNV2VxSEVXbGUwTFZzTjQzSTcveG0zM3Z4cVZVazhKUHdaWGFCZ0RLb05KaXltZUZQT0JpbGtzeE4rK0l6Ry9tMG1sZE1FUUZPdWV5aEpZc3VlVEhBVXJDbWhHUkFrVGo1QWFqY2d5aGZiWW9hb1FxNkxHUXZsWDEyMU9Oc1RMTHhKL0FBdVJyNVh4VVpwOThHMHRNanpoNFQyanZGUEVwU0xxcEhkajJENGNUalJDcUtrOHNSVVRWNkFqTmxzSVY2bkJtS3M3cTh2ZHZNWUFCZG1JQ08vdVJKSmF0SlhOWnE0d05GNmZRSncrdEw3TU1ZV1FJaDJMM3Zra0I1SWR1MWVGT3QyWWczdXdzSFFUL1RNZUI3TUR6SzJ4bE9DQSt1QkRBcHhsN0hhOWJCWXZtT2I1bkJDdUhsbkdISDc2WC9ocHhyd2pUcHFKNFFBWnVHRTlqd0pUQllFUnJWQT09IiwiaWF0IjoxNzExNjI0NzczLCJleHAiOjE3MTI0ODg3NzN9.92C1btwlLTrxSkbEBzpwfGKIfwQosaDLRuZPRoznEOA&quot;,&quot;user&quot;:{&quot;userType&quot;:13,&quot;userId&quot;:&quot;5eecb269533e27e4a83b6cda&quot;,&quot;userName&quot;:&quot;Sudhish 1&quot;,&quot;name&quot;:&quot;Sudhish 1&quot;,&quot;email&quot;:&quot;sales@boltseal.com&quot;,&quot;stateCode&quot;:&quot;DL&quot;,&quot;state&quot;:&quot;Delhi&quot;,&quot;noc&quot;:&quot;&quot;,&quot;exporters&quot;:[],&quot;permissions&quot;:[{&quot;features&quot;:{&quot;miniAdmin&quot;:{&quot;registartionInfo&quot;:true,&quot;addressBook&quot;:true,&quot;orderDetails&quot;:true,&quot;courierToself&quot;:true,&quot;readerDashboard&quot;:true,&quot;readerEdit&quot;:true,&quot;courierPanel&quot;:true,&quot;selfTocourier&quot;:true,&quot;sealTransfer&quot;:true,&quot;discountSetting&quot;:true,&quot;notification&quot;:true,&quot;analysis&quot;:true,&quot;rateApproval&quot;:true,&quot;customOfficer&quot;:true,&quot;documentUpload&quot;:true,&quot;changenoe&quot;:true,&quot;cancelorder&quot;:true,&quot;icegate&quot;:true},&quot;editPI&quot;:true,&quot;editTI&quot;:true,&quot;assignSealType&quot;:true}}]}}</code></pre>
+                                        </div>
+                                        <div class="card-footer">
+                                            <button class="btn btn-outline-secondary btn-sm copyButton" type="button" data-clipboard-action="copy" data-clipboard-target="#copyText-194952a8-1c76-407c-8b43-7131d3799b1f">Copy to Clipboard</button>
+                                        </div>
+                                </div>
+                            </div>
+                            </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="card border-info">
+                                <div class="card-body">
+                                <h5 class="card-title text-uppercase text-white text-center bg-info">Test Information</h5>
+                                    <h5 class="alert alert-success text-uppercase text-center">No Tests for this request</h5>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+                </div>
+            </div>
+            </div>
+        </div>
+    </div>
+    </div>
+    </div>
+    </div>
+    </div>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.2.1/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.datatables.net/v/bs4/dt-1.10.18/datatables.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.0/clipboard.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/remarkable/1.7.1/remarkable.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.2/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+<!-- Set slider initial position depending on the localstorage state -->
+
+<script>
+(function () {
+  var sliderChecked = true;
+  if (localStorage.getItem('theme') === 'theme-light') {
+    setTheme('theme-light');
+    sliderChecked = false;
+  } else {
+    setTheme('theme-dark');
+    sliderChecked = true;
+  }
+  $(document).ready( function () {
+    document.getElementById('slider').checked = sliderChecked;
+  });
+})();
+</script>
+
+<!-- Data Table Configuration -->
+
+<script>
+$(document).ready( function () {
+    $('.datatable').DataTable({
+        "retrieve": true,
+        "paging": false,
+        "info": false,
+        "fixedColumns":   {
+            "heightMatch": 'none'
+        }
+    });
+});
+</script>
+
+<!-- Tooltip Configuration -->
+
+<script>
+$(document).ready(function() {
+    $('[data-toggle="tooltip"]').tooltip({
+        trigger : 'hover'
+    })
+})
+</script>
+
+<!-- Show/Hide The Folders -->
+
+<script>
+$('#openAll').on('click', function(e) {
+let clickCount = $(this).data("clickCount") || 1
+switch (clickCount){
+    case 1:
+            $('#folder-57341417-7d16-4047-b417-1517c66e087a-iteration-0').removeClass('collapsed')
+            $('#folder-collapse-57341417-7d16-4047-b417-1517c66e087a-iteration-0').addClass('show')
+        $('#openAll').html("Collapse Folders");
+        break;
+    case 2:
+            $('#folder-57341417-7d16-4047-b417-1517c66e087a-iteration-0').addClass('collapsed')
+            $('#folder-collapse-57341417-7d16-4047-b417-1517c66e087a-iteration-0').removeClass('show')
+        $('#openAll').html("Expand Folders");
+        break;
+}
+clickCount = clickCount > 1 ? 1 : ++clickCount;
+$(this).data("clickCount", clickCount)
+})
+</script>
+
+<!-- Show/Hide The Requests -->
+
+<script>
+$('#openAllRequests').on('click', function(e) {
+let clickCount = $(this).data("clickCount") || 1
+switch (clickCount){
+    case 1:
+            $('#requests-89387108-31a1-46d6-94f2-b3c0e18d779d').removeClass('collapsed')
+            $('#collapse-89387108-31a1-46d6-94f2-b3c0e18d779d').removeClass('collapsed')
+            $('#requests-89387108-31a1-46d6-94f2-b3c0e18d779d').addClass('show')
+            $('#collapse-89387108-31a1-46d6-94f2-b3c0e18d779d').addClass('show')
+            $('#requests-04ac430a-6b79-4187-a3dd-18f17bb336a5').removeClass('collapsed')
+            $('#collapse-04ac430a-6b79-4187-a3dd-18f17bb336a5').removeClass('collapsed')
+            $('#requests-04ac430a-6b79-4187-a3dd-18f17bb336a5').addClass('show')
+            $('#collapse-04ac430a-6b79-4187-a3dd-18f17bb336a5').addClass('show')
+            $('#requests-ea71b906-add5-4d69-b43b-22febd7057c5').removeClass('collapsed')
+            $('#collapse-ea71b906-add5-4d69-b43b-22febd7057c5').removeClass('collapsed')
+            $('#requests-ea71b906-add5-4d69-b43b-22febd7057c5').addClass('show')
+            $('#collapse-ea71b906-add5-4d69-b43b-22febd7057c5').addClass('show')
+            $('#requests-7ea8f787-11f0-4a61-91f1-df92d9605fce').removeClass('collapsed')
+            $('#collapse-7ea8f787-11f0-4a61-91f1-df92d9605fce').removeClass('collapsed')
+            $('#requests-7ea8f787-11f0-4a61-91f1-df92d9605fce').addClass('show')
+            $('#collapse-7ea8f787-11f0-4a61-91f1-df92d9605fce').addClass('show')
+            $('#requests-eb95f690-a03e-47b8-b949-b41ba243c299').removeClass('collapsed')
+            $('#collapse-eb95f690-a03e-47b8-b949-b41ba243c299').removeClass('collapsed')
+            $('#requests-eb95f690-a03e-47b8-b949-b41ba243c299').addClass('show')
+            $('#collapse-eb95f690-a03e-47b8-b949-b41ba243c299').addClass('show')
+            $('#requests-5278f68c-7d9e-4e7b-8b70-eba31865fe3d').removeClass('collapsed')
+            $('#collapse-5278f68c-7d9e-4e7b-8b70-eba31865fe3d').removeClass('collapsed')
+            $('#requests-5278f68c-7d9e-4e7b-8b70-eba31865fe3d').addClass('show')
+            $('#collapse-5278f68c-7d9e-4e7b-8b70-eba31865fe3d').addClass('show')
+        $('#openAllRequests').html("Collapse Requests");
+        break;
+    case 2:
+            $('#requests-89387108-31a1-46d6-94f2-b3c0e18d779d').addClass('collapsed')
+            $('#collapse-89387108-31a1-46d6-94f2-b3c0e18d779d').addClass('collapsed')
+            $('#requests-89387108-31a1-46d6-94f2-b3c0e18d779d').removeClass('show')
+            $('#collapse-89387108-31a1-46d6-94f2-b3c0e18d779d').removeClass('show')
+            $('#requests-04ac430a-6b79-4187-a3dd-18f17bb336a5').addClass('collapsed')
+            $('#collapse-04ac430a-6b79-4187-a3dd-18f17bb336a5').addClass('collapsed')
+            $('#requests-04ac430a-6b79-4187-a3dd-18f17bb336a5').removeClass('show')
+            $('#collapse-04ac430a-6b79-4187-a3dd-18f17bb336a5').removeClass('show')
+            $('#requests-ea71b906-add5-4d69-b43b-22febd7057c5').addClass('collapsed')
+            $('#collapse-ea71b906-add5-4d69-b43b-22febd7057c5').addClass('collapsed')
+            $('#requests-ea71b906-add5-4d69-b43b-22febd7057c5').removeClass('show')
+            $('#collapse-ea71b906-add5-4d69-b43b-22febd7057c5').removeClass('show')
+            $('#requests-7ea8f787-11f0-4a61-91f1-df92d9605fce').addClass('collapsed')
+            $('#collapse-7ea8f787-11f0-4a61-91f1-df92d9605fce').addClass('collapsed')
+            $('#requests-7ea8f787-11f0-4a61-91f1-df92d9605fce').removeClass('show')
+            $('#collapse-7ea8f787-11f0-4a61-91f1-df92d9605fce').removeClass('show')
+            $('#requests-eb95f690-a03e-47b8-b949-b41ba243c299').addClass('collapsed')
+            $('#collapse-eb95f690-a03e-47b8-b949-b41ba243c299').addClass('collapsed')
+            $('#requests-eb95f690-a03e-47b8-b949-b41ba243c299').removeClass('show')
+            $('#collapse-eb95f690-a03e-47b8-b949-b41ba243c299').removeClass('show')
+            $('#requests-5278f68c-7d9e-4e7b-8b70-eba31865fe3d').addClass('collapsed')
+            $('#collapse-5278f68c-7d9e-4e7b-8b70-eba31865fe3d').addClass('collapsed')
+            $('#requests-5278f68c-7d9e-4e7b-8b70-eba31865fe3d').removeClass('show')
+            $('#collapse-5278f68c-7d9e-4e7b-8b70-eba31865fe3d').removeClass('show')
+        $('#openAllRequests').html("Expand Requests");
+        break;
+}
+clickCount = clickCount > 1 ? 1 : ++clickCount;
+$(this).data("clickCount", clickCount)
+})
+</script>
+
+<!-- Show/Hide The Skipped Tests -->
+
+<script>
+$('#openAllSkipped').on('click', function(e) {
+let clickCount = $(this).data("clickCount") || 1
+switch (clickCount){
+    case 1:
+            $('#skipped-89387108-31a1-46d6-94f2-b3c0e18d779d').removeClass('collapsed')
+            $('#skipped-collapse-89387108-31a1-46d6-94f2-b3c0e18d779d').removeClass('collapsed')
+            $('#skipped-89387108-31a1-46d6-94f2-b3c0e18d779d').addClass('show')
+            $('#skipped-collapse-89387108-31a1-46d6-94f2-b3c0e18d779d').addClass('show')
+            $('#skipped-04ac430a-6b79-4187-a3dd-18f17bb336a5').removeClass('collapsed')
+            $('#skipped-collapse-04ac430a-6b79-4187-a3dd-18f17bb336a5').removeClass('collapsed')
+            $('#skipped-04ac430a-6b79-4187-a3dd-18f17bb336a5').addClass('show')
+            $('#skipped-collapse-04ac430a-6b79-4187-a3dd-18f17bb336a5').addClass('show')
+            $('#skipped-ea71b906-add5-4d69-b43b-22febd7057c5').removeClass('collapsed')
+            $('#skipped-collapse-ea71b906-add5-4d69-b43b-22febd7057c5').removeClass('collapsed')
+            $('#skipped-ea71b906-add5-4d69-b43b-22febd7057c5').addClass('show')
+            $('#skipped-collapse-ea71b906-add5-4d69-b43b-22febd7057c5').addClass('show')
+            $('#skipped-7ea8f787-11f0-4a61-91f1-df92d9605fce').removeClass('collapsed')
+            $('#skipped-collapse-7ea8f787-11f0-4a61-91f1-df92d9605fce').removeClass('collapsed')
+            $('#skipped-7ea8f787-11f0-4a61-91f1-df92d9605fce').addClass('show')
+            $('#skipped-collapse-7ea8f787-11f0-4a61-91f1-df92d9605fce').addClass('show')
+            $('#skipped-eb95f690-a03e-47b8-b949-b41ba243c299').removeClass('collapsed')
+            $('#skipped-collapse-eb95f690-a03e-47b8-b949-b41ba243c299').removeClass('collapsed')
+            $('#skipped-eb95f690-a03e-47b8-b949-b41ba243c299').addClass('show')
+            $('#skipped-collapse-eb95f690-a03e-47b8-b949-b41ba243c299').addClass('show')
+            $('#skipped-5278f68c-7d9e-4e7b-8b70-eba31865fe3d').removeClass('collapsed')
+            $('#skipped-collapse-5278f68c-7d9e-4e7b-8b70-eba31865fe3d').removeClass('collapsed')
+            $('#skipped-5278f68c-7d9e-4e7b-8b70-eba31865fe3d').addClass('show')
+            $('#skipped-collapse-5278f68c-7d9e-4e7b-8b70-eba31865fe3d').addClass('show')
+        $('#openAllSkipped').html("Collapse All Skipped Tests");
+        break;
+    case 2:
+            $('#skipped-89387108-31a1-46d6-94f2-b3c0e18d779d').addClass('collapsed')
+            $('#skipped-collapse-89387108-31a1-46d6-94f2-b3c0e18d779d').addClass('collapsed')
+            $('#skipped-89387108-31a1-46d6-94f2-b3c0e18d779d').removeClass('show')
+            $('#skipped-collapse-89387108-31a1-46d6-94f2-b3c0e18d779d').removeClass('show')
+            $('#skipped-04ac430a-6b79-4187-a3dd-18f17bb336a5').addClass('collapsed')
+            $('#skipped-collapse-04ac430a-6b79-4187-a3dd-18f17bb336a5').addClass('collapsed')
+            $('#skipped-04ac430a-6b79-4187-a3dd-18f17bb336a5').removeClass('show')
+            $('#skipped-collapse-04ac430a-6b79-4187-a3dd-18f17bb336a5').removeClass('show')
+            $('#skipped-ea71b906-add5-4d69-b43b-22febd7057c5').addClass('collapsed')
+            $('#skipped-collapse-ea71b906-add5-4d69-b43b-22febd7057c5').addClass('collapsed')
+            $('#skipped-ea71b906-add5-4d69-b43b-22febd7057c5').removeClass('show')
+            $('#skipped-collapse-ea71b906-add5-4d69-b43b-22febd7057c5').removeClass('show')
+            $('#skipped-7ea8f787-11f0-4a61-91f1-df92d9605fce').addClass('collapsed')
+            $('#skipped-collapse-7ea8f787-11f0-4a61-91f1-df92d9605fce').addClass('collapsed')
+            $('#skipped-7ea8f787-11f0-4a61-91f1-df92d9605fce').removeClass('show')
+            $('#skipped-collapse-7ea8f787-11f0-4a61-91f1-df92d9605fce').removeClass('show')
+            $('#skipped-eb95f690-a03e-47b8-b949-b41ba243c299').addClass('collapsed')
+            $('#skipped-collapse-eb95f690-a03e-47b8-b949-b41ba243c299').addClass('collapsed')
+            $('#skipped-eb95f690-a03e-47b8-b949-b41ba243c299').removeClass('show')
+            $('#skipped-collapse-eb95f690-a03e-47b8-b949-b41ba243c299').removeClass('show')
+            $('#skipped-5278f68c-7d9e-4e7b-8b70-eba31865fe3d').addClass('collapsed')
+            $('#skipped-collapse-5278f68c-7d9e-4e7b-8b70-eba31865fe3d').addClass('collapsed')
+            $('#skipped-5278f68c-7d9e-4e7b-8b70-eba31865fe3d').removeClass('show')
+            $('#skipped-collapse-5278f68c-7d9e-4e7b-8b70-eba31865fe3d').removeClass('show')
+        $('#openAllSkipped').html("Expand All Skipped Tests");
+        break;
+}
+clickCount = clickCount > 1 ? 1 : ++clickCount;
+$(this).data("clickCount", clickCount)
+})
+</script>
+
+<!-- Show/Hide The Failures -->
+
+<script>
+$('#openAllFailed').on('click', function(e) {
+let clickCount = $(this).data("clickCount") || 1
+let failedItemContent
+let failedItemHeading
+switch (clickCount){
+    case 1:
+            failedItemHeading = $('#fails-e0acac6b-1fe9-4384-a24c-a2ee03409d13');
+            failedItemContent = $("#fails-collapse-e0acac6b-1fe9-4384-a24c-a2ee03409d13");
+            failedItemHeading.removeClass('collapsed')
+            failedItemContent.removeClass('collapsed')
+            failedItemHeading.addClass('show')
+            failedItemContent.addClass('show')
+        $('#openAllFailed').html("Collapse All Failed Tests");
+        break;
+    case 2:
+            failedItemHeading = $('#fails-e0acac6b-1fe9-4384-a24c-a2ee03409d13');
+            failedItemContent = $("#fails-collapse-e0acac6b-1fe9-4384-a24c-a2ee03409d13");
+            failedItemHeading.removeClass('show')
+            failedItemContent.removeClass('show')
+            failedItemHeading.addClass('collapsed')
+            failedItemContent.addClass('collapsed')
+        $('#openAllFailed').html("Expand All Failed Tests");
+        break;
+}
+clickCount = clickCount > 1 ? 1 : ++clickCount;
+$(this).data("clickCount", clickCount)
+})
+</script>
+
+<!-- Pretty Print the Response Body-->
+
+<script>
+function isJSON(data)
+{
+    var ret = true;
+    try {
+            JSON.parse(data);
+    }catch(e) {
+            ret = false;
+    }
+    return ret;
+}
+
+function isXML(data)
+{
+    return (data.length > 0 && data[0] === '<');
+}
+
+// see https://gist.github.com/sente/1083506/d2834134cd070dbcc08bf42ee27dabb746a1c54d#gistcomment-2254622
+function formatXML(data) {
+    const PADDING = ' '.repeat(2); // set desired indent size here
+    const reg = /(>)(<)(\/*)/g;
+    let pad = 0;
+    xml = data.replace(reg, '$1\r\n$2$3');
+
+    return xml.split('\r\n').map((node, index) => {
+        let indent = 0;
+        if (node.match(/.+<\/\w[^>]*>$/)) {
+            indent = 0;
+        } else if (node.match(/^<\/\w/) && pad > 0) {
+            pad -= 1;
+        } else if (node.match(/^<\w[^>]*[^\/]>.*$/)) {
+            indent = 1;
+        } else {
+            indent = 0;
+        }
+
+        pad += indent;
+        return PADDING.repeat(pad - indent) + node;
+    }).join('\r\n');
+}
+
+$(".prettyPrint").each(function () {
+        var data = $(this).text();
+        // Verify whether data is JSON
+        if(isJSON(data))
+        {
+                obj = JSON.parse(data);
+                data = JSON.stringify(obj, null, 2);
+        }
+        else if(isXML(data)) {
+            data = formatXML(data);
+        }
+        $(this).text(data);
+});
+</script>
+
+
+<!-- Copy Response Body To Clipboard -->
+
+<script>
+    var clipboard = new ClipboardJS('.copyButton');
+
+    clipboard.on('success', function(e) {
+        e.clearSelection();
+        $(".copyButton").addClass("bg-success text-white")
+        e.trigger.textContent = '✔ Copied!';
+        window.setTimeout(function() {
+            $(".copyButton").removeClass("bg-success text-white")
+            e.trigger.textContent = 'Copy to Clipboard';
+        }, 2000);
+    });
+    clipboard.on('error', function(e) {
+        e.clearSelection();
+        $(".copyButton").addClass("bg-danger text-white")
+        e.trigger.textContent = '✗ Not Copied';
+        window.setTimeout(function() {
+            $(".copyButton").removeClass("bg-danger text-white")
+            e.trigger.textContent = 'Copy to Clipboard';
+        }, 2000);
+    });
+
+</script>
+
+<!-- Render the Description Markdown and link in the test failures -->
+
+<script>
+    const remarkable = new Remarkable();
+
+    const descriptions = document.querySelectorAll(".renderMarkdown");
+    descriptions.forEach(description => {
+        description.innerHTML = renderHtmlFromMarkdown(description.textContent);
+    });
+    function renderHtmlFromMarkdown(markdown) {
+        return remarkable.render(trim(markdown));
+    }
+    function trim(string) {
+        return string ? string.replace(/^ +| +$/gm, "") : string;
+    }
+</script>
+
+<!-- Show/Hide The Toggles When Scrolling The Page -->
+
+<script>
+window.onscroll = function() {scrollFunction()};
+
+function scrollFunction() {
+  if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+    document.getElementById("topOfRequestsScreen").style.display = "block";
+    document.getElementById("topOfFailuresScreen").style.display = "block";
+    document.getElementById("topOfSkippedScreen").style.display = "block";
+    document.getElementById("openAll").style.display = "none";
+    document.getElementById("openAllRequests").style.display = "none";
+
+
+    document.getElementById("showOnlyFailures").style.display = "none";
+    document.getElementById("openAllFailed").style.display = "none";
+  } else {
+    document.getElementById("topOfRequestsScreen").style.display = "none";
+    document.getElementById("topOfFailuresScreen").style.display = "none";
+    document.getElementById("topOfSkippedScreen").style.display = "none";
+    document.getElementById("openAll").style.display = "block";
+    document.getElementById("openAllRequests").style.display = "block";
+
+    document.getElementById("showOnlyFailures").style.display = "block";
+    document.getElementById("openAllFailed").style.display = "block";
+  }
+}
+
+function topFunction() {
+  document.body.scrollTop = 0;
+  document.documentElement.scrollTop = 0;
+}
+</script>
+
+<!-- Creates The Iteration Tabs -->
+
+<script type="text/javascript">
+    "use strict";
+
+window.onload = function () {
+
+  // set display for all blocks of response
+  var allItems = document.querySelectorAll('[class*=iteration-]');
+  allItems.forEach(function(elem){
+    elem.style.display = 'block';
+  });
+
+   
+  let totalIterations = 1;
+   
+
+  let menu = document.querySelector('#execution-menu .nav');
+
+  for(var i = 0; i < totalIterations; i++)
+  {
+    let li = document.createElement('li');
+    li.appendChild(document.createTextNode((i + 1)));
+    li.setAttribute('id', 'iteration-' + i);
+    li.classList.add("custom-tab");
+    li.classList.add("itPassed");
+
+    li.addEventListener('click', function() {
+      //set display to none for all except row
+      let allItems = document.querySelectorAll('[class*=iteration-]:not(.row)');
+      allItems.forEach(function(elem) {
+        elem.style.display = 'none';
+      })
+
+      let allMenus = document.querySelectorAll('[id*=iteration-]');
+      allMenus.forEach(function(elem){
+        elem.style.borderBottom = 'none';
+      })
+
+      this.style.borderBottom = 'solid 3px #032a33';
+
+      let items = document.querySelectorAll("." + this.id + ':not(.row)');
+      items.forEach(function(elem) {
+        elem.style.display = elem.style.display == 'block' ? 'none' : 'block';
+      })
+    });
+    menu.appendChild(li);
+  }
+
+  //shows first tab data
+  document.getElementById('iteration-0').click();
+  document.getElementById('iterationSelected').innerHTML = `Iteration ${document.getElementById('iteration-0').innerHTML} selected`
+
+}
+</script>
+
+<!-- Create the Selected Iteration Label -->
+
+<script>
+$(document).ready(function(){
+    $(function() {
+        $("#iterationList li").click(function() {
+            document.getElementById('iterationSelected').innerHTML = "Iteration " + this.innerHTML + " selected"
+        });
+    });
+});
+</script>
+
+<!-- Filter Action for the Iterations -->
+
+<script>
+$("#filterInput").on("input paste", function() {
+    var value = $(this).val();
+    $("#iterationList li").filter(function() {
+	    $("#showOnlyFailures").data("clickCount") ? $("#showOnlyFailures").click():null;
+        $(this).toggle($(this).text().indexOf(value) > -1)
+    });
+});
+</script>
+
+<!-- Showing the Failed Interations -->
+
+<script>
+$('#showOnlyFailures').on('click', function(e) {
+    let clickCount = $(this).data("clickCount") || 1
+	$("#filterInput").val()!="" && clickCount==1 ? $("#filterInput").val('').trigger('input'): null;
+    let selectedIteration = $('#iterationList li').filter(function () {
+        return $(this).css('border-bottom').indexOf("solid") > -1 && $(this).hasClass('itFailed');
+    });
+    selectedIteration.length || clickCount > 1 ? null : $("#iterationList li.itFailed")[0].click()
+    $("#iterationList li.itPassed").toggle()
+    $("div.bg-success [id*=requests]").parents('[class^="row iteration-"]').toggle();
+    clickCount = clickCount > 1 ? 1 : ++clickCount;
+    clickCount > 1 ? $("#showOnlyFailures").html("Show All Iterations") : $("#showOnlyFailures").html("Show Failed Iterations");
+    $(this).data("clickCount", clickCount)
+})
+</script>
+</body>
+</html>
